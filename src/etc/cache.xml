@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="om_nospam_domains" translate="label,description" instance="OM\Nospam\Model\Cache\Type\Domains">
+        <label>Blacklisted Domains</label>
+        <description>List of blacklisted domains that cannot be used to create an account.</description>
+    </type>
+</config>

@@ -1,0 +1,10 @@
+<?php
+/** @var $view \OM\Nospam\ViewModel\Template */
+/** @var $block \Magento\Framework\View\Element\Template */
+$view = $block->getViewModel();
+$urlkey = $view->getHoneypotUrlKey();
+$urltext = $view->getHoneypotUrlText();
+?>
+<?php if ($urlkey && $urltext): ?>
+    <a href="<?= $block->getUrl($urlkey); ?>" rel="nofollow" style="display:none"><?= $urltext; ?></a>
+<?php endif ?>

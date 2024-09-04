@@ -1,0 +1,23 @@
+{
+    "name": "ovalmedia/nospam",
+    "type": "magento2-module",
+    "require": {
+        "magento/framework": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "OM\\Nospam\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ole Hornauer",
+            "email": "oh@oval-media.de"
+        }
+    ],
+    "require": {}
+}

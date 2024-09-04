@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add
+            id="OM_Nospam::main"
+            title="Nospam"
+            translate="title"
+            module="OM_Nospam"
+            sortOrder="100"
+            parent="Magento_Backend::system"
+            resource="OM_Nospam::main"/>
+
+        <add
+            id="OM_Nospam::blacklist"
+            title="Blacklist"
+            translate="title"
+            module="OM_Nospam"
+            sortOrder="10"
+            parent="OM_Nospam::main"
+            action="nospam/blacklist/index"
+            resource="OM_Nospam::menu"/>
+
+        <add
+            id="OM_Nospam::domains"
+            title="Domains"
+            translate="title"
+            module="OM_Nospam"
+            sortOrder="20"
+            parent="OM_Nospam::main"
+            action="nospam/domain/index"
+            resource="OM_Nospam::menu"/>
+
+        <add
+                id="OM_Nospam::url"
+                title="Suspicious URLs"
+                translate="title"
+                module="OM_Nospam"
+                sortOrder="30"
+                parent="OM_Nospam::main"
+                action="nospam/url/index"
+                resource="OM_Nospam::url"/>
+    </menu>
+</config>

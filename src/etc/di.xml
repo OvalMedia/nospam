@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="OM\Nospam\Api\BlacklistInterface" type="OM\Nospam\Api\Blacklist"/>
+    <preference for="OM\Nospam\Api\DomainInterface" type="OM\Nospam\Api\Domain"/>
+    <preference for="OM\Nospam\Api\SuspiciousUrlInterface" type="OM\Nospam\Api\SuspiciousUrl"/>
+    <preference for="OM\Nospam\Api\UrlInterface" type="OM\Nospam\Api\Url"/>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="om_nospam_log_cleanup_command" xsi:type="object">OM\Nospam\Console\CleanupCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

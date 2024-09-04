@@ -1,0 +1,48 @@
+<?php
+/** @var $view \OM\Nospam\ViewModel\Template */
+$view = $block->getViewModel();
+$actions = $view->getFormActions();
+$hpactions = $view->getFormHoneypotActions();
+$hpdata = $view->getFormHoneypotData();
+$tsactions = $view->getFormTimestampActions();
+?>
+<?php if (($view->useFormTimestamps() || $view->useFormHoneypots()) && !empty($actions)): ?>
+    <script>
+        require([
+                'jquery'
+            ],
+            function($) {
+                'use strict';
+                $(function() {
+                    <?php if (!empty($hpactions)): ?>
+                        let hp = {
+                            <?php foreach ($hpdata as $key => $item): ?>
+                                '<?= $key ?>': {
+                                    'name': '<?= $item['name'] ?>',
+                                    'id': '<?= strtolower($item['id']) ?>',
+                                    'title': '<?= $item['title'] ?>'
+                                },
+                            <?php endforeach ?>
+                        }
+
+                        $([<?= implode(',', $hpactions) ?>]).each(function(idx, action){
+                            let name = hp[action].name;
+                            let id = hp[action].id;
+                            let title = hp[action].title;
+                            $('form[action*="' + action + '"]').append(
+                                '<input type="text" style="display:none" name="' + name + '" id="' + id + '" value="" title="' + title + '" tabindex="-1" autocomplete="off" />'
+                            );
+                        });
+                    <?php endif ?>
+
+                    <?php if (!empty($tsactions)): ?>
+                        $([<?= implode(',', $tsactions) ?>]).each(function(idx, action){
+                            $('form[action*="' + action + '"]').append(
+                                '<input type="text" style="display:none" tabindex="-1" autocomplete="off" name="<?= $view->getTimestampFieldName() ?>" value="<?= $view->getFormTimestamp() ?>" />'
+                            );
+                        });
+                    <?php endif ?>
+                });
+            });
+    </script>
+<?php endif ?>

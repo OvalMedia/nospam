@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="om_nospam_blacklist" resource="default" engine="innodb">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
+        <column xsi:type="char" name="ip" length="15" nullable="false" />
+        <column xsi:type="datetime" name="date" default="CURRENT_TIMESTAMP" on_update="false" />
+        <column xsi:type="text" name="comment" nullable="true" />
+        <column xsi:type="text" name="user_agent" nullable="true" />
+        <column xsi:type="text" name="request" nullable="true" />
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+
+    <table name="om_nospam_domains" resource="default" engine="innodb">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
+        <column xsi:type="varchar" name="domain" length="255" nullable="false" />
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+
+        <constraint xsi:type="unique" referenceId="OM_NOSPAM_DOMAINS_UNIQUE">
+            <column name="domain"/>
+        </constraint>
+    </table>
+
+    <table name="om_nospam_urls" resource="default" engine="innodb">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
+        <column xsi:type="char" name="ip" length="15" nullable="false" />
+        <column xsi:type="datetime" name="date" default="CURRENT_TIMESTAMP" on_update="false" />
+        <column xsi:type="text" name="url" nullable="false" />
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+</schema>

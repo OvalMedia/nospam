@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- -->
+    <event name="controller_action_predispatch">
+        <observer name="om_nospam_controller_action_predispatch" instance="OM\Nospam\Observer\ControllerActionPredispatch" />
+    </event>
+
+    <!-- Customer Account Create -->
+    <event name="controller_action_predispatch_customer_account_create">
+        <observer name="om_nospam_controller_action_predispatch_customer_account_create" instance="OM\Nospam\Observer\Blacklisted" />
+    </event>
+
+    <!-- Customer Account Create Post -->
+    <event name="controller_action_predispatch_customer_account_createpost">
+        <observer name="om_nospam_controller_action_predispatch_customer_account_createpost" instance="OM\Nospam\Observer\ControllerActionPredispatch" />
+    </event>
+
+    <!-- Newsletter Signup Post -->
+    <event name="controller_action_predispatch_newsletter_subscriber_new">
+        <observer name="om_nospam_controller_action_predispatch_newsletter_subscriber_new" instance="OM\Nospam\Observer\ControllerActionPredispatch" />
+    </event>
+
+    <!-- Customer Account Login Post -->
+    <event name="controller_action_predispatch_customer_account_login">
+        <observer name="om_nospam_controller_action_predispatch_account_login_post" instance="OM\Nospam\Observer\Blacklisted" />
+    </event>
+
+    <!-- Customer Account Login Post -->
+    <event name="controller_action_predispatch_customer_account_loginPost">
+        <observer name="om_nospam_controller_action_predispatch_account_login_post" instance="OM\Nospam\Observer\ControllerActionPredispatch" />
+    </event>
+
+    <!-- Search Post -->
+    <event name="controller_action_predispatch_catalogsearch_result_index">
+        <observer name="om_nospam_controller_action_predispatch_catalogsearch_result_index" instance="OM\Nospam\Observer\ControllerActionPredispatch" />
+    </event>
+
+    <!-- Contact -->
+    <event name="controller_action_predispatch_contact_index_index">
+        <observer name="om_nospam_controller_action_predispatch_contact_index_index" instance="OM\Nospam\Observer\Blacklisted" />
+    </event>
+
+    <!-- Contact Post -->
+    <event name="controller_action_predispatch_contact_index_post">
+        <observer name="om_nospam_controller_action_predispatch_contact_index_post" instance="OM\Nospam\Observer\ControllerActionPredispatch" />
+    </event>
+</config>

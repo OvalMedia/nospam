@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Blacklist -->
+    <virtualType name="OM\Nospam\Model\ResourceModel\Blacklist\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">om_nospam_blacklist</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Blacklist</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- benötigt? -->
+    <!--type name="OM\Nospam\Ui\DataProvider\Blacklist\ListingDataProvider">
+        <plugin name="dev_grid_attributes" type="OM\Nospam\Plugin\AddAttributesToUiDataProvider" />
+    </type-->
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="om_nospam_blacklist_data_source" xsi:type="string">OMNospamBlacklistCollection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="OMNospamBlacklistCollection" type="OM\Nospam\Ui\DataProvider\Blacklist\Listing\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">om_nospam_blacklist</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Blacklist</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Blacklisted Domains -->
+    <virtualType name="OM\Nospam\Model\ResourceModel\Domain\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">om_nospam_domains</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Domain</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="om_nospam_domain_data_source" xsi:type="string">OMNospamDomainCollection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="OMNospamDomainCollection" type="OM\Nospam\Ui\DataProvider\Domain\Listing\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">om_nospam_domains</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Domain</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Suspicious URLs -->
+    <virtualType name="OM\Nospam\Model\ResourceModel\Url\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">om_nospam_urls</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Url</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="om_nospam_url_data_source" xsi:type="string">OMNospamUrlCollection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="OMNospamUrlCollection" type="OM\Nospam\Ui\DataProvider\Url\Listing\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">om_nospam_urls</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Url</argument>
+        </arguments>
+    </virtualType>
+</config>

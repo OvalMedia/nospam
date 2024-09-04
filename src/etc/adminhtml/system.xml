@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="ovalmedia" translate="label comment" sortOrder="10">
+            <label>Oval Media</label>
+        </tab>
+        <section id="om_nospam" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Nospam</label>
+            <tab>ovalmedia</tab>
+            <resource>OM_Nospam::general_config</resource>
+
+            <group id="general" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+
+            <group id="forms" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Forms</label>
+                <group id="honeypots" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Honeypots</label>
+
+                    <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[<p>Add a global honeypot URL to catch bad bots.</p>]]></comment>
+                    </field>
+
+                    <field id="forms" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Form Actions</label>
+                        <frontend_model>OM\Nospam\Block\Adminhtml\FormActionsField</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <comment><![CDATA[<p>List of actions to identify the forms to add a honeypot field to.</p>]]></comment>
+                        <depends>
+                            <field id="*/*/*/enabled">1</field>
+                        </depends>
+                    </field>
+                </group>
+
+                <group id="timestamps" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Timestamps</label>
+
+                    <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[<p>Add timestamp field to forms.</p>]]></comment>
+                    </field>
+
+                    <field id="threshold" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Threshold</label>
+                        <comment><![CDATA[
+                    <p>Amount of seconds before a form can be validated. Humans usually take a couple of seconds before they submit a form. Bots can submit them instantly which reveals their true nature.</p>
+                    <p>This field is injected via javascript. A bot might omit this, so by checking for the field's existence can also tell if there is a bot at work or not.</p>
+                    <p>Smart bots know about this and won't be fooled by a threshold though.</p>
+                    ]]></comment>
+                        <depends>
+                            <field id="*/*/*/enabled">1</field>
+                        </depends>
+                    </field>
+
+                    <field id="forms" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Form Actions</label>
+                        <frontend_model>OM\Nospam\Block\Adminhtml\FormActionsField</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <comment><![CDATA[<p>List of actions to identify the forms to add a timestamp field to.</p>]]></comment>
+                        <depends>
+                            <field id="*/*/*/enabled">1</field>
+                        </depends>
+                    </field>
+                </group>
+
+                <group id="regex" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Regex</label>
+
+                    <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[
+                            <p>Regular expressions that any field from any form submission will be checked against:</p>
+                            <ul style="margin-left:14px">
+                                <li>account creation</li>
+                                <li>newsletter signup</li>
+                                <li>customer account login</li>
+                                <li>search</li>
+                                <li>contact form</li>
+                            </ul>
+                            ]]></comment>
+                    </field>
+
+                    <field id="expressions" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Regex Expressions</label>
+                        <frontend_model>OM\Nospam\Block\Adminhtml\RegexField</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <comment><![CDATA[<p>Regex expressions to check post data against.</p>]]></comment>
+                        <depends>
+                            <field id="*/*/*/enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="exclude" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Do not check</label>
+                        <frontend_model>OM\Nospam\Block\Adminhtml\InputField</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <comment><![CDATA[<p>Fields that should not be checked against regular expressions.</p>]]></comment>
+                        <depends>
+                            <field id="*/*/*/enabled">1</field>
+                        </depends>
+                    </field>
+                </group>
+            </group>
+
+            <group id="bots" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Bots</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[<p>Add a global honeypot URL to catch bad bots.</p>]]></comment>
+                </field>
+
+                <field id="url_key" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>URL Key</label>
+                    <comment><![CDATA[<p>URL Key for the bad bot endpoint.</p>]]></comment>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
+                </field>
+
+                <field id="url_text" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>URL Text</label>
+                    <comment><![CDATA[<p>URL Text for the bad bot endpoint.</p>]]></comment>
+                    <depends>
+                        <field id="*/*/enabled">1</field>
+                    </depends>
+                </field>
+
+                <!--group id="whitelist" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Whitelist</label>
+                    <field id="user_agents" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Whitelist</label>
+                        <frontend_model>OM\Nospam\Block\Adminhtml\WhitelistField</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <comment>Good Bots.</comment>
+                    </field>
+                </group-->
+            </group>
+
+            <group id="email" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>E-Mail</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[<p>Check for blacklisted mail domains.</p>]]></comment>
+                </field>
+            </group>
+
+            <group id="address" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Address Options</label>
+
+                <field id="intro" translate="label comment" type="note" sortOrder="5" showInDefault="1">
+                    <label></label>
+                    <frontend_model>OM\Nospam\Block\Adminhtml\System\Info</frontend_model>
+                    <comment></comment>
+                </field>
+
+                <field id="firstname" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Firstname</label>
+                    <comment><![CDATA[<p>Max length for the 'firstname' field.</p>]]></comment>
+                </field>
+
+                <field id="lastname" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Lastname</label>
+                    <comment><![CDATA[<p>Max length for the 'lastname' field.</p>]]></comment>
+                </field>
+
+                <field id="middlename" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Middlename</label>
+                    <comment><![CDATA[<p>Max length for the 'middlename' field.</p>]]></comment>
+                </field>
+
+                <field id="company" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Company</label>
+                    <comment><![CDATA[<p>Max length for the 'company' field.</p>]]></comment>
+                </field>
+
+                <field id="street" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Street</label>
+                    <comment><![CDATA[<p>Max length for the 'street' field.</p>]]></comment>
+                </field>
+
+                <field id="city" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>City</label>
+                    <comment><![CDATA[<p>Max length for the 'city' field.</p>]]></comment>
+                </field>
+
+                <field id="postcode" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Postcode</label>
+                    <comment><![CDATA[<p>Max length for the 'postcode' field.</p>]]></comment>
+                </field>
+
+                <field id="telephone" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Telephone</label>
+                    <comment><![CDATA[<p>Max length for the 'telephone' field.</p>]]></comment>
+                </field>
+            </group>
+
+            <group id="suspicious" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Suspicious URLs</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[<p>Check for suspicious url parts.</p>]]></comment>
+                </field>
+                <field id="urls" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>List of url parts</label>
+                    <frontend_model>OM\Nospam\Block\Adminhtml\InputField</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment><![CDATA[<p>List of URL parts that are deemed to be suspicious.</p>]]></comment>
+                    <depends>
+                        <field id="*/*/*/enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+
+            <group id="misc" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Miscellaneous</label>
+                <field id="remove_from_request" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Remove from request</label>
+                    <frontend_model>OM\Nospam\Block\Adminhtml\InputField</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment><![CDATA[<p>Requests will be logged in the database. These fields should be removed from requests before storing in database.</p>]]></comment>
+                </field>
+                <field id="max_blacklist_entries" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Max blacklist entries</label>
+                    <comment><![CDATA[<p>Maximum blacklist entries of an IP before getting permanently banned.</p>]]></comment>
+                </field>
+                <field id="log_lifetime_days" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Log Lifetime</label>
+                    <comment><![CDATA[<p>Amount of days blacklist entries should be kept. '0' to disable.</p>]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

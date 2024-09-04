@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <om_nospam>
+            <general>
+                <enabled>1</enabled>
+            </general>
+
+            <forms>
+                <honeypots>
+                    <enabled>1</enabled>
+                    <forms>{"_1699266672523_523":{"name":"Customer Website","action":"\/customer\/account\/createpost\/"},"_1699266957131_131":{"name":"Customer No","action":"\/customer\/account\/loginPost\/"},"_1699266972067_67":{"name":"Subject","action":"\/contact\/index\/post\/"},"_1699266982955_955":{"name":"Name","action":"\/newsletter\/subscriber\/new\/"},"_1699267005538_538":{"name":"Review","action":"\/review\/product\/post\/"},"_1699954839671_671":{"name":"Search","action":"\/catalogsearch\/result\/"}}</forms>
+                </honeypots>
+
+                <timestamps>
+                    <enabled>1</enabled>
+                    <threshold>3</threshold>
+                    <forms>{"_1699018719952_952":{"name":"Search","action":"\/catalogsearch\/result\/"},"_1699018722809_809":{"name":"Newsletter Signup","action":"\/newsletter\/subscriber\/new\/"},"_1699018750104_104":{"name":"Account Login","action":"\/customer\/account\/loginPost\/"},"_1699018761216_216":{"name":"Account Creation","action":"\/customer\/account\/createpost\/"},"_1699018782336_336":{"name":"Contact Form","action":"\/contact\/index\/post\/"},"_1699022198863_863":{"name":"Review Form","action":"\/review\/product\/post\/"}}</forms>
+                </timestamps>
+
+                <regex>
+                    <enabled>1</enabled>
+                    <expressions>{"_1695197093010_10":{"name":"Chinese","expression":"\/\\p{Han}+\/u"},"_1695197125802_802":{"name":"Japanese","expression":"\/[\\x{4E00}-\\x{9FBF}\\x{3040}-\\x{309F}\\x{30A0}-\\x{30FF}]\/u"},"_1695197139266_266":{"name":"Korean","expression":"\/[\\x{3130}-\\x{318F}\\x{AC00}-\\x{D7AF}]\/u"},"_1699104040971_971":{"name":"Russian","expression":"\/[\u0410-\u042f\u0430-\u044f\u0401\u0451]\/u"}}</expressions>
+                    <exclude>{"_1695200978216_216":{"field":"password"}}</exclude>
+                </regex>
+            </forms>
+
+            <bots>
+                <enabled>1</enabled>
+                <url_key>honeypot</url_key>
+                <url_text>Honeypot</url_text>
+            </bots>
+
+            <email>
+                <enabled>1</enabled>
+            </email>
+
+            <address>
+                <firstname>32</firstname>
+                <lastname>32</lastname>
+                <middlename>32</middlename>
+                <company>64</company>
+                <street>64</street>
+                <city>64</city>
+                <postcode>10</postcode>
+                <telephone>24</telephone>
+            </address>
+
+            <suspicious>
+                <enabled>1</enabled>
+            </suspicious>
+
+            <misc>
+                <remove_from_request>{"_1695129649389_389":{"field":"g-recaptcha-response"},"_1695129658142_142":{"field":"token"},"_1695129658742_742":{"field":"form_key"},"_1695129659302_302":{"field":"password"},"_1695129678029_29":{"field":"password_confirmation"}}</remove_from_request>
+                <max_blacklist_entries>3</max_blacklist_entries>
+                <log_lifetime_days>365</log_lifetime_days>
+            </misc>
+        </om_nospam>
+    </default>
+</config>
