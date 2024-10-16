@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Actions;
+
+use OM\Nospam\Model\Config;
 
 class DecryptTime
 {
@@ -9,13 +12,13 @@ class DecryptTime
     /**
      * @var \OM\Nospam\Model\Config
      */
-    protected \OM\Nospam\Model\Config $_config;
+    protected Config $_config;
 
     /**
      * @param \OM\Nospam\Model\Config $config
      */
     public function __construct(
-        \OM\Nospam\Model\Config $config
+        Config $config
     ) {
         $this->_config = $config;
     }

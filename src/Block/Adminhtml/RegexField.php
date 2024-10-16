@@ -1,7 +1,11 @@
 <?php
+declare(strict_types=1);
+
 namespace OM\Nospam\Block\Adminhtml;
 
-class RegexField extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+
+class RegexField extends AbstractFieldArray
 {
     /**
      * @return void

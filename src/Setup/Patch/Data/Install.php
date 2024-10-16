@@ -1,45 +1,60 @@
 <?php
+declare(strict_types=1);
+namespace OM\Nospam\Setup\Patch\Data;
 
-namespace OM\Nospam\Setup;
-
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Module\Dir;
+use OM\Nospam\Model\Config;
 
-class InstallData implements \Magento\Framework\Setup\InstallDataInterface
+class Install implements DataPatchInterface
 {
     const CSV_FILE = 'trashmaildomains.csv';
 
     /**
      * @var \Magento\Framework\App\Config\Storage\WriterInterface
      */
-    protected \Magento\Framework\App\Config\Storage\WriterInterface $_configWriter;
+    protected WriterInterface $_configWriter;
 
     /**
      * @var \Magento\Framework\Filesystem\Io\File
      */
-    protected \Magento\Framework\Filesystem\Io\File $_file;
+    protected File $_file;
 
     /**
      * @var \Magento\Framework\Module\Dir
      */
-    protected \Magento\Framework\Module\Dir $_dir;
+    protected Dir $_dir;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected \Magento\Framework\DB\Adapter\AdapterInterface $_db;
+    protected AdapterInterface $_db;
 
     /**
+     * @var ModuleDataSetupInterface
+     */
+    private ModuleDataSetupInterface $_moduleDataSetup;
+
+    /**
+     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Framework\App\ResourceConnection $connection
      * @param \Magento\Framework\Filesystem\Io\File $file
      * @param \Magento\Framework\Module\Dir $dir
      */
     public function __construct(
-        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
+        ModuleDataSetupInterface $moduleDataSetup,
+        WriterInterface $configWriter,
         \Magento\Framework\App\ResourceConnection $connection,
-        \Magento\Framework\Filesystem\Io\File $file,
-        \Magento\Framework\Module\Dir $dir
+        File $file,
+        Dir $dir
     ) {
+        $this->_moduleDataSetup = $moduleDataSetup;
         $this->_configWriter = $configWriter;
         $this->_file = $file;
         $this->_dir = $dir;
@@ -47,21 +62,22 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
     }
 
     /**
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $setup
-     * @param \Magento\Framework\Setup\ModuleContextInterface $context
-     *
-     * @return void
-     * @throws \Exception
+     * {@inheritdoc}
      */
-    public function install(\Magento\Framework\Setup\ModuleDataSetupInterface $setup, \Magento\Framework\Setup\ModuleContextInterface $context)
+    public function apply()
     {
-        $path = \OM\Nospam\Model\Config::CONFIG_PATH . '/forms/timestamps/';
+        $this->_setupMailDomains();
+        $this->_setupConfigData();
+    }
+
+    protected function _setupConfigData()
+    {
+        $path = Config::CONFIG_PATH . '/forms/timestamps/';
         $ivlen = openssl_cipher_iv_length('aes-128-cbc');
         $char = chr(ord('a') + rand(0, 25));
         $this->_configWriter->save($path . 'fieldname', $char . bin2hex(random_bytes(4)));
         $this->_configWriter->save($path . 'cipher_iv', bin2hex(random_bytes($ivlen / 2)));
         $this->_configWriter->save($path . 'cipher_passphrase', bin2hex(random_bytes(32)));
-        $this->_setupMailDomains();
     }
 
     /**
@@ -92,5 +108,21 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
                 }
             }
         }
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public static function getDependencies(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getAliases(): array
+    {
+        return [];
     }
 }

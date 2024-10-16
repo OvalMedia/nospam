@@ -1,0 +1,53 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Framework\Escaper;
+use OM\Nospam\ViewModel\Nospam;
+
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var Nospam $view */
+$view = $viewModels->require(Nospam::class);
+$actions = $view->getFormActions();
+$hpactions = $view->getFormHoneypotActions();
+$hpdata = $view->getFormHoneypotData();
+$tsactions = $view->getFormTimestampActions();
+?>
+<?php if (($view->useFormTimestamps() || $view->useFormHoneypots()) && !empty($actions)): ?>
+<script>
+    <?php if (!empty($hpactions)): ?>
+    let hp = {
+        <?php foreach ($hpdata as $key => $item): ?>
+        '<?= $key ?>': {
+            'name': '<?= $item['name'] ?>',
+            'id': '<?= strtolower($item['id']) ?>',
+            'title': '<?= $item['title'] ?>'
+        },
+        <?php endforeach ?>
+    }
+
+    const hpactions = [<?= implode(',', $hpactions) ?>];
+
+    hpactions.forEach((action) => {
+        let name = hp[action].name;
+        let id = hp[action].id;
+        let title = hp[action].title;
+        let form = document.querySelector('form[action*="' + action + '"]');
+
+        if (form) {
+            let fs = form.querySelector('fieldset');
+            let target = fs ? fs : form;
+            let x = document.createElement('input');
+            x.type = 'text';
+            x.name = name;
+            x.title = title;
+            x.id = id;
+            x.tabIndex = -1;
+            x.style = 'display: none';
+            target.appendChild(x);
+        }
+    });
+    <?php endif ?>
+</script>
+<?php endif ?>

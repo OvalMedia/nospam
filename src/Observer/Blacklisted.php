@@ -1,38 +1,48 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Observer;
 
-class Blacklisted implements \Magento\Framework\Event\ObserverInterface
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\Message\ManagerInterface;
+use OM\Nospam\Api\BlacklistInterface;
+use OM\Nospam\Model\Config;
+
+class Blacklisted implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\App\ResponseInterface
      */
-    protected \Magento\Framework\App\ResponseInterface $_response;
+    protected ResponseInterface $_response;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
      */
-    protected \Magento\Framework\App\ActionFlag $_actionFlag;
+    protected ActionFlag $_actionFlag;
 
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected \Magento\Framework\UrlInterface $_url;
+    protected UrlInterface $_url;
 
     /**
      * @var \OM\Nospam\Api\BlacklistInterface
      */
-    protected \OM\Nospam\Api\BlacklistInterface $_blacklist;
+    protected BlacklistInterface $_blacklist;
 
     /**
      * @var \OM\Nospam\Model\Config
      */
-    protected \OM\Nospam\Model\Config $_config;
+    protected Config $_config;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected \Magento\Framework\Message\ManagerInterface $_messageManager;
+    protected ManagerInterface $_messageManager;
 
     /**
      * @param \Magento\Framework\App\ResponseInterface $response
@@ -43,12 +53,12 @@ class Blacklisted implements \Magento\Framework\Event\ObserverInterface
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Framework\App\ResponseInterface $response,
-        \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\UrlInterface $url,
-        \OM\Nospam\Api\BlacklistInterface $blacklist,
-        \OM\Nospam\Model\Config $config,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        ResponseInterface $response,
+        ActionFlag $actionFlag,
+        UrlInterface $url,
+        BlacklistInterface $blacklist,
+        Config $config,
+        ManagerInterface $messageManager
     ) {
         $this->_response = $response;
         $this->_actionFlag = $actionFlag;
@@ -60,7 +70,6 @@ class Blacklisted implements \Magento\Framework\Event\ObserverInterface
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
-     *
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -70,7 +79,7 @@ class Blacklisted implements \Magento\Framework\Event\ObserverInterface
         }
 
         if ($this->_blacklist->isBlacklisted()) {
-            $this->_messageManager->addErrorMessage(__('You have been blacklisted.'));
+            $this->_messageManager->addErrorMessage(__(BlacklistInterface::ERROR_MSG_BLACKLISTED));
             $url = $this->_config->getNoRouteUrl();
             $redirectUrl = '/';
 
@@ -78,7 +87,7 @@ class Blacklisted implements \Magento\Framework\Event\ObserverInterface
                 $redirectUrl = $this->_url->getUrl($url);
             }
 
-            $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+            $this->_actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
             $this->_response->setRedirect($redirectUrl, 404)->sendResponse();
         }
     }

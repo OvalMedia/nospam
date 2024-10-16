@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Block\Adminhtml\Domain\Edit;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+
+class Form extends Generic
 {
     /**
      * Prepare form.

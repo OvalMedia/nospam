@@ -1,8 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Model\ResourceModel\Url;
 
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use OM\Nospam\Model\Url;
+use OM\Nospam\Model\ResourceModel\Blacklist as ResourceModelUrl;
+
+class Collection extends AbstractCollection
 {
     /**
      * @var string
@@ -22,11 +27,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @return void
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(
-            \OM\Nospam\Model\Url::class,
-            \OM\Nospam\Model\ResourceModel\Url::class
+            Url::class,
+            ResourceModelUrl::class
         );
     }
 }

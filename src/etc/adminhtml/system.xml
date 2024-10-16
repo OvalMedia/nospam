@@ -25,7 +25,7 @@
                     <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <comment><![CDATA[<p>Add a global honeypot URL to catch bad bots.</p>]]></comment>
+                        <comment><![CDATA[<p></p>]]></comment>
                     </field>
 
                     <field id="forms" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -120,7 +120,7 @@
 
                 <field id="url_key" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>URL Key</label>
-                    <comment><![CDATA[<p>URL Key for the bad bot endpoint.</p>]]></comment>
+                    <comment><![CDATA[<p>URL Key for the bad bot endpoint. Make sure this url does not collide with any real URL used by this store.</p>]]></comment>
                     <depends>
                         <field id="*/*/enabled">1</field>
                     </depends>
@@ -228,7 +228,7 @@
                     <label>Remove from request</label>
                     <frontend_model>OM\Nospam\Block\Adminhtml\InputField</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-                    <comment><![CDATA[<p>Requests will be logged in the database. These fields should be removed from requests before storing in database.</p>]]></comment>
+                    <comment><![CDATA[<p>Requests will be logged in the database. These fields will be removed from requests before storing them in the database.</p>]]></comment>
                 </field>
                 <field id="max_blacklist_entries" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Max blacklist entries</label>

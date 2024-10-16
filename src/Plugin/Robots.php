@@ -1,26 +1,31 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Plugin;
+
+use Magento\Framework\UrlInterface;
+use Magento\Robots\Model\Robots as RobotsCore;
+use OM\Nospam\Model\Config;
 
 class Robots
 {
     /**
-     * @var \OM\Nospam\Model\Config
+     * @var \OM\Nospam\Config
      */
-    protected \OM\Nospam\Model\Config $_config;
+    protected Config $_config;
 
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected \Magento\Framework\UrlInterface $_url;
+    protected UrlInterface $_url;
 
     /**
-     * @param \OM\Nospam\Model\Config $config
+     * @param \OM\Nospam\Config $config
      * @param \Magento\Framework\UrlInterface $url
      */
     public function __construct(
-        \OM\Nospam\Model\Config $config,
-        \Magento\Framework\UrlInterface $url
+        Config $config,
+        UrlInterface $url
     ) {
         $this->_config = $config;
         $this->_url = $url;
@@ -29,10 +34,9 @@ class Robots
     /**
      * @param \Magento\Robots\Model\Robots $robots
      * @param string|null $result
-     *
      * @return string|null
      */
-    public function afterGetData(\Magento\Robots\Model\Robots $robots, ?string $result): ?string
+    public function afterGetData(RobotsCore $robots, ?string $result): ?string
     {
         if ($this->_config->showHoneypotUrl()) {
             $urlkey = $this->_config->getHoneypotUrlKey();

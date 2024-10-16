@@ -1,45 +1,56 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Api;
 
-use OM\Nospam\Model\Cache\Type\Blacklist as CacheType;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\HTTP\Header;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
-class Blacklist implements \OM\Nospam\Api\BlacklistInterface
+use OM\Nospam\Model\Cache\Type\Blacklist as CacheType;
+use OM\Nospam\Api\BlacklistInterface;
+use OM\Nospam\Model\Config;
+
+class Blacklist implements BlacklistInterface
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected \Magento\Framework\DB\Adapter\AdapterInterface $_db;
+    protected AdapterInterface $_db;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
      */
-    protected \Magento\Framework\App\CacheInterface $_cache;
+    protected CacheInterface $_cache;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected \Magento\Framework\App\RequestInterface $_request;
+    protected RequestInterface $_request;
 
     /**
      * @var \Magento\Framework\HTTP\Header
      */
-    protected \Magento\Framework\HTTP\Header $_header;
+    protected Header $_header;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
      */
-    protected \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $_remoteAddress;
+    protected RemoteAddress $_remoteAddress;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    protected \Magento\Framework\Serialize\SerializerInterface $_serializer;
+    protected SerializerInterface $_serializer;
 
     /**
      * @var \OM\Nospam\Model\Config
      */
-    protected \OM\Nospam\Model\Config $_config;
+    protected Config $_config;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $connection
@@ -51,13 +62,13 @@ class Blacklist implements \OM\Nospam\Api\BlacklistInterface
      * @param \OM\Nospam\Model\Config $config
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $connection,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\HTTP\Header $header,
-        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-        \Magento\Framework\Serialize\SerializerInterface $serializer,
-        \OM\Nospam\Model\Config $config
+        ResourceConnection $connection,
+        CacheInterface $cache,
+        RequestInterface $request,
+        Header $header,
+        RemoteAddress $remoteAddress,
+        SerializerInterface $serializer,
+        Config $config
     ){
         $this->_db = $connection->getConnection('default');
         $this->_cache = $cache;

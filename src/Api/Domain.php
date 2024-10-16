@@ -1,19 +1,23 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Api;
 
-class Domain implements \OM\Nospam\Api\DomainInterface
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
+class Domain implements DomainInterface
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected \Magento\Framework\DB\Adapter\AdapterInterface $_db;
+    protected AdapterInterface $_db;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $connection
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $connection
+        ResourceConnection $connection
     ) {
         $this->_db = $connection->getConnection('default');
     }

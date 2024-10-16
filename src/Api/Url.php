@@ -1,28 +1,29 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Api;
 
-class Url implements \OM\Nospam\Api\UrlInterface
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+
+class Url implements UrlInterface
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected \Magento\Framework\DB\Adapter\AdapterInterface $_db;
+    protected AdapterInterface $_db;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
      */
-    protected \Magento\Framework\App\CacheInterface $_cache;
+    protected CacheInterface $_cache;
 
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
      */
-    protected \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $_remoteAddress;
-
-    /**
-     * @var \OM\Nospam\Model\Config
-     */
-    protected \OM\Nospam\Model\Config $_config;
+    protected RemoteAddress $_remoteAddress;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $connection
@@ -30,9 +31,9 @@ class Url implements \OM\Nospam\Api\UrlInterface
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $connection,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+        ResourceConnection $connection,
+        CacheInterface $cache,
+        RemoteAddress $remoteAddress
     ){
         $this->_db = $connection->getConnection('default');
         $this->_cache = $cache;

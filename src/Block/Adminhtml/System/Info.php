@@ -1,12 +1,19 @@
 <?php
+declare(strict_types=1);
+
 namespace OM\Nospam\Block\Adminhtml\System;
 
-class Info extends \Magento\Config\Block\System\Config\Form\Field\Heading
+use Magento\Config\Block\System\Config\Form\Field\Heading;
+use Magento\Backend\Block\Context;
+use Magento\Framework\Module\PackageInfoFactory;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
+class Info extends Heading
 {
     /**
      * @var \Magento\Framework\Module\PackageInfoFactory
      */
-    protected \Magento\Framework\Module\PackageInfoFactory $_packageInfoFactory;
+    protected PackageInfoFactory $_packageInfoFactory;
 
     /**
      * @param \Magento\Backend\Block\Context $context
@@ -14,8 +21,8 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field\Heading
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Framework\Module\PackageInfoFactory $packageInfoFactory,
+        Context $context,
+        PackageInfoFactory $packageInfoFactory,
         array $data = []
     ) {
         $this->_packageInfoFactory = $packageInfoFactory;
@@ -24,10 +31,9 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field\Heading
 
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     *
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         return __($element->getComment());
     }

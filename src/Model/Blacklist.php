@@ -1,8 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Model;
 
-class Blacklist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject\IdentityInterface;
+use OM\Nospam\Model\ResourceModel\Blacklist as ResourceModelBlacklist;
+
+class Blacklist extends AbstractModel implements IdentityInterface
 {
     /**
      *
@@ -18,7 +23,7 @@ class Blacklist extends \Magento\Framework\Model\AbstractModel implements \Magen
      *
      */
     protected function _construct() {
-        $this->_init(\OM\Nospam\Model\ResourceModel\Blacklist::class);
+        $this->_init(ResourceModelBlacklist::class);
     }
 
     /**

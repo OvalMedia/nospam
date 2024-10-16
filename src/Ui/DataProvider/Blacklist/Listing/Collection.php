@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Ui\DataProvider\Blacklist\Listing;
 
-class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+
+class Collection extends SearchResult
 {
     /**
      * @return void

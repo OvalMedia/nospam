@@ -1,22 +1,31 @@
 <?php
+declare(strict_types=1);
+
 namespace OM\Nospam\Observer;
 
-class CheckoutSubmitBefore implements \Magento\Framework\Event\ObserverInterface
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
+use OM\Nospam\Api\BlacklistInterface;
+use OM\Nospam\Api\DomainInterface;
+use OM\Nospam\Model\Config;
+
+class CheckoutSubmitBefore implements ObserverInterface
 {
     /**
      * @var \OM\Nospam\Api\BlacklistInterface
      */
-    protected \OM\Nospam\Api\BlacklistInterface $_blacklist;
+    protected BlacklistInterface $_blacklist;
 
     /**
      * @var \OM\Nospam\Api\DomainInterface
      */
-    protected \OM\Nospam\Api\DomainInterface $_domain;
+    protected DomainInterface $_domain;
 
     /**
      * @var \OM\Nospam\Model\Config
      */
-    protected \OM\Nospam\Model\Config $_config;
+    protected Config $_config;
 
     /**
      * @var array
@@ -29,9 +38,9 @@ class CheckoutSubmitBefore implements \Magento\Framework\Event\ObserverInterface
      * @param \OM\Nospam\Model\Config $config
      */
     public function __construct(
-        \OM\Nospam\Api\BlacklistInterface $blacklist,
-        \OM\Nospam\Api\DomainInterface $domain,
-        \OM\Nospam\Model\Config $config
+        BlacklistInterface $blacklist,
+        DomainInterface $domain,
+        Config $config
     ) {
         $this->_blacklist = $blacklist;
         $this->_domain = $domain;
@@ -39,20 +48,20 @@ class CheckoutSubmitBefore implements \Magento\Framework\Event\ObserverInterface
     }
 
     /**
-     *
-     * Dieser Event wird in webapi_rest/events.xml gefeuert.
+     * This event is triggered by webapi_rest/events.xml.
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if (!$this->_config->isModuleEnabled()) {
             return;
         }
 
         if ($this->_blacklist->isBlacklisted()) {
-            $this->_deny([__('You have been blacklisted.')]);
+            $this->_deny([__(BlacklistInterface::ERROR_MSG_BLACKLISTED)]);
             return;
         }
 
@@ -63,7 +72,7 @@ class CheckoutSubmitBefore implements \Magento\Framework\Event\ObserverInterface
 
         if ($this->_domain->isBlacklisted($email)) {
             [,$domain] = explode('@', $email);
-            $this->_deny(["Your email domain '%1' is not allowed. Please pick another email address.", '@' . $domain]);
+            $this->_deny([DomainInterface::ERROR_MSG_DOMAIN_DENIED, '@' . $domain]);
         }
 
         if (!$this->_checkAddressFields($quote)) {
@@ -149,12 +158,11 @@ class CheckoutSubmitBefore implements \Magento\Framework\Event\ObserverInterface
 
     /**
      * @param array $message
-     *
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _deny(array $message)
     {
-        throw new \Magento\Framework\Exception\LocalizedException(__(...$message));
+        throw new LocalizedException(__(...$message));
     }
 }

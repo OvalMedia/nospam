@@ -1,6 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Model;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class Cache
 {
@@ -12,17 +18,17 @@ class Cache
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected \Magento\Framework\DB\Adapter\AdapterInterface $_db;
+    protected AdapterInterface $_db;
 
     /**
      * @var \Magento\Framework\App\CacheInterface
      */
-    protected \Magento\Framework\App\CacheInterface $_cache;
+    protected CacheInterface $_cache;
 
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface
      */
-    protected \Magento\Framework\Serialize\SerializerInterface $_serializer;
+    protected SerializerInterface $_serializer;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $connection
@@ -30,9 +36,9 @@ class Cache
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $connection,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\Serialize\SerializerInterface $serializer
+        ResourceConnection $connection,
+        CacheInterface $cache,
+        SerializerInterface $serializer
     ){
         $this->_db = $connection->getConnection('default');
         $this->_cache = $cache;
@@ -41,22 +47,23 @@ class Cache
 
     /**
      * @return void
-     * @throws \Zend_Db_Statement_Exception
      */
-    public function refresh()
+    public function refresh(): void
     {
-        $ips = array();
-        $res = $this->_db->query("SELECT ip FROM om_nospam_blacklist");
+        try {
+            $ips = array();
+            $res = $this->_db->query("SELECT ip FROM om_nospam_blacklist");
 
-        while ($ip = $res->fetchColumn()) {
-            $ips[] = $ip;
-        }
+            while ($ip = $res->fetchColumn()) {
+                $ips[] = $ip;
+            }
 
-        $this->_cache->save(
-            $this->_serializer->serialize($ips),
-            self::CACHE_KEY,
-            [self::CACHE_TAG],
-            self::CACHE_LIFETIME
-        );
+            $this->_cache->save(
+                $this->_serializer->serialize($ips),
+                self::CACHE_KEY,
+                [self::CACHE_TAG],
+                self::CACHE_LIFETIME
+            );
+        } catch (\Exception $e) {}
     }
 }

@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OM\Nospam\Actions;
+
+use OM\Nospam\Model\Config;
 
 class EncryptTime
 {
@@ -9,13 +13,13 @@ class EncryptTime
     /**
      * @var \OM\Nospam\Model\Config
      */
-    protected \OM\Nospam\Model\Config $_config;
+    protected Config $_config;
 
     /**
      * @param \OM\Nospam\Model\Config $config
      */
     public function __construct(
-        \OM\Nospam\Model\Config $config
+        Config $config
     ) {
         $this->_config = $config;
     }
@@ -32,7 +36,7 @@ class EncryptTime
         if (!empty($iv) && !empty($passphrase)) {
             if (in_array(self::CIPHER, openssl_get_cipher_methods())) {
                 $time = new \DateTime();
-                $result = openssl_encrypt($time->getTimestamp(), self::CIPHER, $passphrase, 0, $iv);
+                $result = openssl_encrypt((string) $time->getTimestamp(), self::CIPHER, $passphrase, 0, $iv);
             }
         }
 

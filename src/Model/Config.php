@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
+
 namespace OM\Nospam\Model;
 
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Config
 {
@@ -11,7 +13,7 @@ class Config
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected \Magento\Framework\App\Config\ScopeConfigInterface $_scope;
+    protected ScopeConfigInterface $_scope;
 
     /**
      * @var array
@@ -27,7 +29,7 @@ class Config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scope
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scope
+        ScopeConfigInterface $scope
     ) {
         $this->_scope = $scope;
     }

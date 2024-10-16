@@ -1,8 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Model;
 
-class Domain extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject\IdentityInterface;
+
+class Domain extends AbstractModel implements IdentityInterface
 {
     /**
      *
@@ -17,8 +21,9 @@ class Domain extends \Magento\Framework\Model\AbstractModel implements \Magento\
     /**
      *
      */
-    protected function _construct() {
-        $this->_init(\OM\Nospam\Model\ResourceModel\Domain::class);
+    protected function _construct(): void
+    {
+        $this->_init(ResourceModel\Domain::class);
     }
 
     /**

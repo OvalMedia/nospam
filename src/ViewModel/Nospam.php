@@ -1,12 +1,24 @@
 <?php
+declare(strict_types=1);
+
 namespace OM\Nospam\ViewModel;
 
-class Template implements \Magento\Framework\View\Element\Block\ArgumentInterface
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\Escaper;
+use OM\Nospam\Model\Config;
+use OM\Nospam\Actions\EncryptTime;
+
+class Nospam implements ArgumentInterface
 {
     /**
      * @var \OM\Nospam\Model\Config
      */
-    protected $_config;
+    protected Config $_config;
+
+    /**
+     * @var \OM\Nospam\Actions\EncryptTime
+     */
+    protected EncryptTime $_encryptTime;
 
     /**
      * @var int|null
@@ -29,11 +41,6 @@ class Template implements \Magento\Framework\View\Element\Block\ArgumentInterfac
     protected $_timestampActions;
 
     /**
-     * @var \OM\Nospam\Actions\EncryptTime
-     */
-    protected \OM\Nospam\Actions\EncryptTime $_encryptTime;
-
-    /**
      * @var \Magento\Framework\Escaper
      */
     protected \Magento\Framework\Escaper $_escaper;
@@ -44,9 +51,9 @@ class Template implements \Magento\Framework\View\Element\Block\ArgumentInterfac
      * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
-        \OM\Nospam\Model\Config $config,
-        \OM\Nospam\Actions\EncryptTime $encryptTime,
-        \Magento\Framework\Escaper $escaper
+        Config $config,
+        EncryptTime $encryptTime,
+        Escaper $escaper
     ) {
         $this->_config = $config;
         $this->_encryptTime = $encryptTime;
@@ -256,7 +263,6 @@ class Template implements \Magento\Framework\View\Element\Block\ArgumentInterfac
     public function getFormTimestampActions(): array
     {
         if ($this->_timestampActions === null) {
-
             $this->_timestampActions = [];
             if ($actions = $this->_config->getFormTimestampActions()) {
                 foreach ($actions as $key => $action) {

@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Model\ResourceModel;
 
-class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+class Url extends AbstractDb
 {
     /**
      * @var string

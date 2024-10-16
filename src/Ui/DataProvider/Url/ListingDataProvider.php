@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Ui\DataProvider\Url;
 
-class ListingDataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
+
+class ListingDataProvider extends DataProvider
 {
 }

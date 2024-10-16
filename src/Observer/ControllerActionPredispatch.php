@@ -1,70 +1,87 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Observer;
 
-class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverInterface
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\App\Action\Action;
+use OM\Nospam\Api\BlacklistInterface;
+use OM\Nospam\Api\DomainInterface;
+use OM\Nospam\Api\UrlInterface as NospamUrlInterface;
+use OM\Nospam\Model\Config;
+use OM\Nospam\Actions\DecryptTime;
+
+class ControllerActionPredispatch implements ObserverInterface
 {
     const FLAG_SUSPICIOUS_URL = 'flag_suspicious_url_checked';
 
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected \Magento\Framework\App\RequestInterface $_request;
+    protected RequestInterface $_request;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
      */
-    protected \Magento\Framework\App\ResponseInterface $_response;
+    protected ResponseInterface $_response;
 
     /**
      * @var \Magento\Framework\App\ActionFlag
      */
-    protected \Magento\Framework\App\ActionFlag $_actionFlag;
+    protected ActionFlag $_actionFlag;
 
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected \Magento\Framework\UrlInterface $_url;
+    protected UrlInterface $_url;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
      */
-    protected \Magento\Framework\App\Response\RedirectInterface $_redirect;
+    protected RedirectInterface $_redirect;
 
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory
      */
-    protected \Magento\Framework\Controller\Result\RedirectFactory $_redirectFactory;
+    protected RedirectFactory $_redirectFactory;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected \Magento\Framework\Message\ManagerInterface $_messageManager;
+    protected ManagerInterface $_messageManager;
 
     /**
-     * @var \OM\Nospam\Api\BlacklistInterface 
+     * @var \OM\Nospam\Api\BlacklistInterface
      */
-    protected \OM\Nospam\Api\BlacklistInterface $_blacklist;
+    protected BlacklistInterface $_blacklist;
 
     /**
      * @var \OM\Nospam\Api\UrlInterface
      */
-    protected \OM\Nospam\Api\UrlInterface $_suspiciousUrl;
+    protected NospamUrlInterface $_suspiciousUrl;
 
     /**
      * @var \OM\Nospam\Api\DomainInterface
      */
-    protected \OM\Nospam\Api\DomainInterface $_domain;
+    protected DomainInterface $_domain;
 
     /**
      * @var \OM\Nospam\Model\Config
      */
-    protected \OM\Nospam\Model\Config $_config;
+    protected Config $_config;
 
     /**
      * @var \OM\Nospam\Actions\DecryptTime
      */
-    protected \OM\Nospam\Actions\DecryptTime $_decryptTime;
+    protected DecryptTime $_decryptTime;
 
     /**
      * @var bool
@@ -99,18 +116,18 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
      * @param \OM\Nospam\Actions\DecryptTime $decryptTime
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\ResponseInterface $response,
-        \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Response\RedirectInterface $redirect,
-        \Magento\Framework\Controller\Result\RedirectFactory $redirectFactory,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \OM\Nospam\Api\BlacklistInterface $blacklist,
-        \OM\Nospam\Api\UrlInterface $suspiciousUrl,
-        \OM\Nospam\Api\DomainInterface $domain,
-        \OM\Nospam\Model\Config $config,
-        \OM\Nospam\Actions\DecryptTime $decryptTime
+        RequestInterface $request,
+        ResponseInterface $response,
+        ActionFlag $actionFlag,
+        UrlInterface $url,
+        RedirectInterface $redirect,
+        RedirectFactory $redirectFactory,
+        ManagerInterface $messageManager,
+        BlacklistInterface $blacklist,
+        NospamUrlInterface $suspiciousUrl,
+        DomainInterface $domain,
+        Config $config,
+        DecryptTime $decryptTime
     ) {
         $this->_request = $request;
         $this->_response = $response;
@@ -154,7 +171,7 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
          */
         if ($this->_config->useFormTimestamps()) {
             if (!$this->_checkFormTimestamp()) {
-                $this->_redirect($this->_getDenyUrl(), 404);
+                $this->_redirect($this->_getDenyUrl());
                 return;
             }
         }
@@ -164,7 +181,7 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
          */
         if ($this->_config->useFormHoneypots()) {
             if (!$this->_checkFormHoneypot()) {
-                $this->_redirect($this->_getDenyUrl(), 404);
+                $this->_redirect($this->_getDenyUrl());
                 return;
             }
         }
@@ -174,7 +191,7 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
          */
         if ($this->_config->useFormRegex()) {
             if (!$this->_checkRegex()) {
-                $this->_redirect($this->_getDenyUrl(), 404);
+                $this->_redirect($this->_getDenyUrl());
                 return;
             }
         }
@@ -229,9 +246,9 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
     }
 
     /**
-     * @return array|string|string[]
+     * @return string
      */
-    protected function _getUri()
+    protected function _getUri(): string
     {
         return str_replace($this->_url->getBaseUrl(), '', $this->_url->getCurrentUrl());
     }
@@ -279,7 +296,7 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
 
     /**
      * @return bool
-     * @see \OM\Nospam\ViewModel\Template::getFormTimestamp()
+     * @see \ViewModel\Template::getFormTimestamp()
      */
     protected function _checkFormTimestamp(): bool
     {
@@ -321,8 +338,8 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
                 if (stripos($uri, trim($action['action'], '/')) !== false) {
                     $name = str_replace(' ', '-', strtolower($action['name']));
 
-                    if (!empty($post[$name])) {
-                        $this->_blacklist->add('Honeypot: ' . $name . ' in URI: ' . $uri);
+                    if (!isset($post[$name]) || !empty($post[$name])) {
+                        $this->_blacklist->add("Honeypot: '$name' in URI: $uri");
                         $result = false;
                         break;
                     }
@@ -400,7 +417,7 @@ class ControllerActionPredispatch implements \Magento\Framework\Event\ObserverIn
      */
     protected function _redirect($url, $code = 404)
     {
-        $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+        $this->_actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
         $this->_response->setRedirect($url, $code)->sendResponse();
     }
 

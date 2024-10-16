@@ -1,31 +1,38 @@
 <?php
+declare(strict_types=1);
+
 namespace OM\Nospam\Ui\Component\Domain\Listing\Column;
 
-class Actions extends \Magento\Ui\Component\Listing\Columns\Column
+use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\UrlInterface;
+
+class Actions extends Column
 {
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected \Magento\Framework\UrlInterface $_urlBuilder;
+    protected UrlInterface $_urlBuilder;
 
     /**
-     * @var mixed|string
+     * @var string
      */
-    protected $_deleteUrl;
+    protected string $_deleteUrl;
 
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param $deleteUrl
+     * @param string $deleteUrl
      * @param array $components
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
-        \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        $deleteUrl = '',
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        UrlInterface $urlBuilder,
+        string $deleteUrl = '',
         array $components = [],
         array $data = []
     ) {
@@ -36,7 +43,6 @@ class Actions extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * @param array $dataSource
-     *
      * @return array
      */
     public function prepareDataSource(array $dataSource): array

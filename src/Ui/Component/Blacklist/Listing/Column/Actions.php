@@ -1,36 +1,43 @@
 <?php
+declare(strict_types=1);
+
 namespace OM\Nospam\Ui\Component\Blacklist\Listing\Column;
 
-class Actions extends \Magento\Ui\Component\Listing\Columns\Column
+use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\UrlInterface;
+
+class Actions extends Column
 {
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected \Magento\Framework\UrlInterface $_urlBuilder;
+    protected UrlInterface $_urlBuilder;
 
     /**
-     * @var mixed|string
+     * @var string
      */
-    protected $_viewUrl;
+    protected string $_viewUrl = '';
 
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param $viewUrl
+     * @param string $viewUrl
      * @param array $components
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
-        \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        $viewUrl = '',
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        UrlInterface $urlBuilder,
+        string $viewUrl = '',
         array $components = [],
         array $data = []
     ) {
         $this->_urlBuilder = $urlBuilder;
-        $this->_viewUrl = $viewUrl;
+        $this->_viewUrl_viewUrl = $viewUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 

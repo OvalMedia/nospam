@@ -1,10 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Controller\Adminhtml\Domain;
 
+use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\ResultInterface;
+use OM\Nospam\Model\DomainFactory;
 
-class Add extends \Magento\Backend\App\Action
+class Add extends Action
 {
     /**
      * @var \Magento\Framework\Registry
@@ -22,9 +29,9 @@ class Add extends \Magento\Backend\App\Action
      * @param \OM\Nospam\Model\DomainFactory $domainFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \OM\Nospam\Model\DomainFactory $domainFactory
+        Context $context,
+        Registry $coreRegistry,
+        DomainFactory $domainFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_domainFactory = $domainFactory;
@@ -32,14 +39,13 @@ class Add extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page|(\Magento\Framework\View\Result\Page&\Magento\Framework\Controller\ResultInterface)|void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $id = (int) $this->getRequest()->getParam('id');
         $domain = $this->_domainFactory->create();
 
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         if ($id) {
             $domain = $domain->load($id);
             $title = $domain->getTitle();
@@ -47,12 +53,12 @@ class Add extends \Magento\Backend\App\Action
             if (!$domain->getId()) {
                 $this->messageManager->addError(__('Domain no longer exist.'));
                 $this->_redirect('*/*/rowdata');
-                return;
+                //return;
             }
         }
 
         $this->_coreRegistry->register('domain', $domain);
-        $resultPage = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_PAGE);
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $title = $id ? __('Edit Domain: "%1"', $title) : __('Add new Domain');
         $resultPage->getConfig()->getTitle()->prepend($title);
         return $resultPage;

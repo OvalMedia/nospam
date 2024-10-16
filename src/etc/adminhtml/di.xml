@@ -14,14 +14,6 @@
         <plugin name="dev_grid_attributes" type="OM\Nospam\Plugin\AddAttributesToUiDataProvider" />
     </type-->
 
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="om_nospam_blacklist_data_source" xsi:type="string">OMNospamBlacklistCollection</item>
-            </argument>
-        </arguments>
-    </type>
-
     <virtualType name="OMNospamBlacklistCollection" type="OM\Nospam\Ui\DataProvider\Blacklist\Listing\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">om_nospam_blacklist</argument>
@@ -37,14 +29,6 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="om_nospam_domain_data_source" xsi:type="string">OMNospamDomainCollection</item>
-            </argument>
-        </arguments>
-    </type>
-
     <virtualType name="OMNospamDomainCollection" type="OM\Nospam\Ui\DataProvider\Domain\Listing\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">om_nospam_domains</argument>
@@ -59,14 +43,6 @@
             <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Url</argument>
         </arguments>
     </virtualType>
-
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="om_nospam_url_data_source" xsi:type="string">OMNospamUrlCollection</item>
-            </argument>
-        </arguments>
-    </type>
 
     <virtualType name="OMNospamUrlCollection" type="OM\Nospam\Ui\DataProvider\Url\Listing\Collection">
         <arguments>

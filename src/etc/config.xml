@@ -27,8 +27,8 @@
 
             <bots>
                 <enabled>1</enabled>
-                <url_key>honeypot</url_key>
-                <url_text>Honeypot</url_text>
+                <url_key>about</url_key>
+                <url_text>About</url_text>
             </bots>
 
             <email>

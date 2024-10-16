@@ -1,13 +1,19 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Block\Adminhtml\Domain;
 
-class Add extends \Magento\Backend\Block\Widget\Form\Container
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Phrase;
+
+class Add extends Container
 {
     /**
      * @var \Magento\Framework\Registry
      */
-    protected \Magento\Framework\Registry $_coreRegistry;
+    protected Registry $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
@@ -15,8 +21,8 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -26,7 +32,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @return void
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_objectId = 'entity_id';
         $this->_blockGroup = 'OM_Nospam';
@@ -45,14 +51,13 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @return \Magento\Framework\Phrase
      */
-    public function getHeaderText(): \Magento\Framework\Phrase
+    public function getHeaderText(): Phrase
     {
-        return __('Add RoW Data');
+        return __('Add Row Data');
     }
 
     /**
      * @param $resourceId
-     *
      * @return bool
      */
     protected function _isAllowedAction($resourceId): bool
@@ -61,8 +66,6 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Get form action URL.
-     *
      * @return string
      */
     public function getFormActionUrl(): string

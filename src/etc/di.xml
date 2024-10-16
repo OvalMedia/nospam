@@ -12,4 +12,31 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Blacklist -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="om_nospam_blacklist_data_source" xsi:type="string">OMNospamBlacklistCollection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Blacklisted Domains -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="om_nospam_domain_data_source" xsi:type="string">OMNospamDomainCollection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Suspicious URLs -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="om_nospam_url_data_source" xsi:type="string">OMNospamUrlCollection</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

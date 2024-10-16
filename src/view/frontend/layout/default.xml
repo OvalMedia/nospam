@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <referenceContainer name="before.body.end">
-        <block class="Magento\Framework\View\Element\Template" name="honeypot" template="OM_Nospam::honeypot.phtml" ifconfig="om_nospam/general/enabled">
+        <block name="nospam-honeypot" template="OM_Nospam::honeypot.phtml" ifconfig="om_nospam/general/enabled">
             <arguments>
-                <argument name="view_model" xsi:type="object">OM\Nospam\ViewModel\Template</argument>
+                <argument name="view_model" xsi:type="object">OM\Nospam\ViewModel\Nospam</argument>
             </arguments>
         </block>
 
-        <block class="Magento\Framework\View\Element\Template" name="nospam-js" template="OM_Nospam::js.phtml" ifconfig="om_nospam/general/enabled" after="-">
+        <block name="nospam-js" template="OM_Nospam::js.phtml" ifconfig="om_nospam/general/enabled" after="-">
             <arguments>
-                <argument name="view_model" xsi:type="object">OM\Nospam\ViewModel\Template</argument>
+                <argument name="view_model" xsi:type="object">OM\Nospam\ViewModel\Nospam</argument>
             </arguments>
         </block>
     </referenceContainer>

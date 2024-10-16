@@ -1,7 +1,11 @@
 <?php
+declare(strict_types=1);
+
 namespace OM\Nospam\Block\Adminhtml;
 
-class InputField extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
+use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+
+class InputField extends AbstractFieldArray
 {
     /**
      * @return void

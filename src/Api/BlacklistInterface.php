@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Api;
 
 interface BlacklistInterface
 {
+    public const ERROR_MSG_BLACKLISTED = 'You have been blacklisted.';
+
     /**
      * @return bool
      */

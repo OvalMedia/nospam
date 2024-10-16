@@ -1,8 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace OM\Nospam\Model;
 
-class Url extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject\IdentityInterface;
+
+class Url extends AbstractModel implements IdentityInterface
 {
     /**
      *
@@ -18,7 +22,7 @@ class Url extends \Magento\Framework\Model\AbstractModel implements \Magento\Fra
      *
      */
     protected function _construct() {
-        $this->_init(\OM\Nospam\Model\ResourceModel\Url::class);
+        $this->_init(ResourceModel\Url::class);
     }
 
     /**
