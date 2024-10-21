@@ -9,7 +9,7 @@
             <forms>
                 <honeypots>
                     <enabled>1</enabled>
-                    <forms>{"_1699266672523_523":{"name":"Customer Website","action":"\/customer\/account\/createpost\/"},"_1699266957131_131":{"name":"Customer No","action":"\/customer\/account\/loginPost\/"},"_1699266972067_67":{"name":"Subject","action":"\/contact\/index\/post\/"},"_1699266982955_955":{"name":"Name","action":"\/newsletter\/subscriber\/new\/"},"_1699267005538_538":{"name":"Review","action":"\/review\/product\/post\/"},"_1699954839671_671":{"name":"Search","action":"\/catalogsearch\/result\/"}}</forms>
+                    <forms>{"_1699266672523_523":{"name":"Customer Website","action":"\/customer\/account\/createpost\/"},"_1699266957131_131":{"name":"Customer No","action":"\/customer\/account\/loginPost\/"},"_1699266972067_67":{"name":"Subject","action":"\/contact\/index\/post\/"},"_1699266982955_955":{"name":"Name","action":"\/newsletter\/subscriber\/new\/"},"_1699267005538_538":{"name":"Review","action":"\/review\/product\/post\/"},"_1699954839671_671":{"name":"Sale","action":"\/catalogsearch\/result\/"}}</forms>
                 </honeypots>
 
                 <timestamps>
