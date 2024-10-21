@@ -21,7 +21,6 @@ $tsactions = $view->getFormTimestampActions();
         <?php foreach ($hpdata as $key => $item): ?>
         '<?= $key ?>': {
             'name': '<?= $item['name'] ?>',
-            'id': '<?= strtolower($item['id']) ?>',
             'title': '<?= $item['title'] ?>'
         },
         <?php endforeach ?>
