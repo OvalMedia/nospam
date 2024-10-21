@@ -247,7 +247,6 @@ class Nospam implements ArgumentInterface
                     $name = str_replace(' ', '-', strtolower($row['name']));
                     $this->_honeypotData[$row['action']] = [
                         'name' => $name,
-                        'id' => $name,
                         'title' => $row['name']
                     ];
                 }
