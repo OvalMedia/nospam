@@ -72,6 +72,7 @@ class CheckoutSubmitBefore implements ObserverInterface
 
         if ($this->_domain->isBlacklisted($email)) {
             [,$domain] = explode('@', $email);
+            $this->_blacklist->add('Blacklisted email domain: ' . '@' . $domain);
             $this->_deny([DomainInterface::ERROR_MSG_DOMAIN_DENIED, '@' . $domain]);
         }
 
