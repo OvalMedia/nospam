@@ -118,7 +118,7 @@
         <column name="ip">
             <settings>
                 <filter>text</filter>
-                <bodyTmpl>ui/grid/cells/text</bodyTmpl>
+                <bodyTmpl>OM_Nospam/grid/cells/ip</bodyTmpl>
                 <label translate="true">IP-Address</label>
             </settings>
         </column>
