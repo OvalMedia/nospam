@@ -30,7 +30,6 @@ $tsactions = $view->getFormTimestampActions();
 
     hpactions.forEach((action) => {
         let name = hp[action].name;
-        let id = hp[action].id;
         let title = hp[action].title;
         let form = document.querySelector('form[action*="' + action + '"]');
 
@@ -41,7 +40,6 @@ $tsactions = $view->getFormTimestampActions();
             x.type = 'text';
             x.name = name;
             x.title = title;
-            x.id = id;
             x.tabIndex = -1;
             x.style = 'display: none';
             target.appendChild(x);
