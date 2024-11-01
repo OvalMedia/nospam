@@ -142,6 +142,7 @@ class CheckoutSubmitBefore implements ObserverInterface
         /** @var $address \Magento\Quote\Model\Quote\Address */
         foreach ($addresses as $address) {
             foreach ($address->getData() as $key => $value) {
+                $value = $value ? $value : '';
                 if (isset($addressConfig[$key]) && (strlen($value) > $addressConfig[$key])) {
                     $this->_lastError = [
                         "The length of the address field '%1' exceeds the given limit (%2).",
