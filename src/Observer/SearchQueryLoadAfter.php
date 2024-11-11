@@ -29,6 +29,7 @@ class SearchQueryLoadAfter implements ObserverInterface
 
     /**
      * @param \OM\Nospam\Model\Config $config
+     * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Search\Helper\Data $searchHelper
      */
     public function __construct(
