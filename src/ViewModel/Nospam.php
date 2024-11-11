@@ -239,21 +239,7 @@ class Nospam implements ArgumentInterface
      */
     public function getFormHoneypotData(): array
     {
-        if ($this->_honeypotData === null) {
-            $this->_honeypotData = [];
-
-            if ($actions = $this->_config->getFormHoneypotActions()) {
-                foreach ($actions as $key => $row) {
-                    $name = str_replace(' ', '-', strtolower($row['name']));
-                    $this->_honeypotData[$row['action']] = [
-                        'name' => $name,
-                        'title' => $row['name']
-                    ];
-                }
-            }
-        }
-
-        return $this->_honeypotData;
+        return $this->_config->getFormHoneypotData();
     }
 
     /**

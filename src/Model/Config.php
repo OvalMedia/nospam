@@ -26,6 +26,11 @@ class Config
     protected $_formHoneypotActions;
 
     /**
+     * @var
+     */
+    protected $_honeypotData;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scope
      */
     public function __construct(
@@ -436,6 +441,44 @@ class Config
         }
 
         return $this->_formHoneypotActions;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormHoneypotData(): array
+    {
+        if ($this->_honeypotData === null) {
+            $this->_honeypotData = [];
+
+            if ($actions = $this->getFormHoneypotActions()) {
+                foreach ($actions as $key => $row) {
+                    $name = str_replace(' ', '-', strtolower($row['name']));
+                    $this->_honeypotData[$row['action']] = [
+                        'name' => $name,
+                        'title' => $row['name']
+                    ];
+                }
+            }
+        }
+
+        return $this->_honeypotData;
+    }
+
+    /**
+     * @param string $formAction
+     * @return string
+     */
+    public function getFieldnameByFormAction(string $formAction): string
+    {
+        $result = '';
+        $actions = $this->getFormHoneypotData();
+
+        if (is_array($actions)) {
+            $result = isset($actions[$formAction]) ? $actions[$formAction]['name'] : '';
+        }
+
+        return $result;
     }
 
     /**

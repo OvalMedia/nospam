@@ -44,4 +44,8 @@
     <event name="controller_action_predispatch_contact_index_post">
         <observer name="om_nospam_controller_action_predispatch_contact_index_post" instance="OM\Nospam\Observer\ControllerActionPredispatch" />
     </event>
+
+    <event name="search_query_load_after">
+        <observer name="om_nospam_search_query_model_load_after" instance="OM\Nospam\Observer\SearchQueryLoadAfter" />
+    </event>
 </config>
