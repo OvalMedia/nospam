@@ -57,10 +57,16 @@ class SearchQueryLoadAfter implements ObserverInterface
         $redirect = $query->getRedirect();
         $baseUrl = $this->_url->getBaseUrl();
         $searchUrl = '/' . str_replace($baseUrl, '', $this->_searchHelper->getResultUrl());
-        $fieldName = $this->_config->getFieldnameByFormAction($searchUrl);
 
-        if (!empty($redirect) && !empty($fieldName) && stripos($redirect, $fieldName) === false) {
-            $query->setRedirect($redirect . '&' . $fieldName . '=');
+        /**
+         * Modify query only if redirect target is a search result page.
+         */
+        if (stripos($redirect, $searchUrl) !== false) {
+            $fieldName = $this->_config->getFieldnameByFormAction($searchUrl);
+
+            if (!empty($redirect) && !empty($fieldName) && stripos($redirect, $fieldName) === false) {
+                $query->setRedirect($redirect . '&' . $fieldName . '=');
+            }
         }
     }
 }
