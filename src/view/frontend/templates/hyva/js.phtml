@@ -15,36 +15,36 @@ $hpdata = $view->getFormHoneypotData();
 $tsactions = $view->getFormTimestampActions();
 ?>
 <?php if (($view->useFormTimestamps() || $view->useFormHoneypots()) && !empty($actions)): ?>
-<script>
-    <?php if (!empty($hpactions)): ?>
-    let hp = {
-        <?php foreach ($hpdata as $key => $item): ?>
-        '<?= $key ?>': {
-            'name': '<?= $item['name'] ?>',
-            'title': '<?= $item['title'] ?>'
-        },
-        <?php endforeach ?>
-    }
-
-    const hpactions = [<?= implode(',', $hpactions) ?>];
-
-    hpactions.forEach((action) => {
-        let name = hp[action].name;
-        let title = hp[action].title;
-        let form = document.querySelector('form[action*="' + action + '"]');
-
-        if (form) {
-            let fs = form.querySelector('fieldset');
-            let target = fs ? fs : form;
-            let x = document.createElement('input');
-            x.type = 'text';
-            x.name = name;
-            x.title = title;
-            x.tabIndex = -1;
-            x.style = 'display: none';
-            target.appendChild(x);
+    <script>
+        <?php if (!empty($hpactions)): ?>
+        let hp = {
+            <?php foreach ($hpdata as $key => $item): ?>
+            '<?= $key ?>': {
+                'name': '<?= $item['name'] ?>',
+                'title': '<?= $item['title'] ?>'
+            },
+            <?php endforeach ?>
         }
-    });
-    <?php endif ?>
-</script>
+
+        const hpactions = [<?= implode(',', $hpactions) ?>];
+
+        hpactions.forEach((action) => {
+            let name = hp[action].name;
+            let title = hp[action].title;
+            let forms = document.querySelectorAll('form[action*="' + action + '"]');
+
+            forms.forEach(form => {
+                let fs = form.querySelector('fieldset');
+                let target = fs ? fs : form;
+                let x = document.createElement('input');
+                x.type = 'text';
+                x.name = name;
+                x.title = title;
+                x.tabIndex = -1;
+                x.style = 'display: none';
+                target.appendChild(x);
+            });
+        });
+        <?php endif ?>
+    </script>
 <?php endif ?>
