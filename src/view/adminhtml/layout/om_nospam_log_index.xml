@@ -3,9 +3,9 @@
     <body>
         <referenceContainer name="content">
             <!--
-                "name" must match the xml in view\adminhtml\ui_component\om_nospam_blacklist.xml
+                "name" must match the xml in view\adminhtml\ui_component\om_nospam_log.xml
             -->
-            <uiComponent name="om_nospam_blacklist"/>
+            <uiComponent name="om_nospam_log"/>
         </referenceContainer>
     </body>
 </page>

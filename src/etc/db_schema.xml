@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="om_nospam_blacklist" resource="default" engine="innodb">
+    <table name="om_nospam_log" onCreate="migrateDataFromAnotherTable(om_nospam_blacklist)" resource="default" engine="innodb">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
         <column xsi:type="char" name="ip" length="15" nullable="false" />
         <column xsi:type="datetime" name="date" default="CURRENT_TIMESTAMP" on_update="false" />

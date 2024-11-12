@@ -6,7 +6,7 @@ namespace OM\Nospam\Model\Cache\Type;
 use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 
-class Blacklist extends TagScope
+class Log extends TagScope
 {
     const CACHE_KEY = 'om_nospam_ip';
     const CACHE_TAG = 'OM_NOSPAM_IP';

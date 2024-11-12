@@ -11,11 +11,11 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
-use OM\Nospam\Model\Cache\Type\Blacklist as CacheType;
-use OM\Nospam\Api\BlacklistInterface;
+use OM\Nospam\Model\Cache\Type\Log as CacheType;
+use OM\Nospam\Api\LogInterface;
 use OM\Nospam\Model\Config;
 
-class Blacklist implements BlacklistInterface
+class Log implements LogInterface
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -89,7 +89,7 @@ class Blacklist implements BlacklistInterface
         try {
             if ($ip = $this->_getCurrentIp()) {
                 $data = $this->_getData();
-                $max = $this->_config->getMaxBlacklistEntries();
+                $max = $this->_config->getMaxLogEntries();
 
                 if (isset($data[$ip]) && count($data[$ip]) >= $max) {
                     $result = true;
@@ -109,7 +109,7 @@ class Blacklist implements BlacklistInterface
     {
         try {
             $this->_db->query(
-                "INSERT INTO om_nospam_blacklist
+                "INSERT INTO om_nospam_log
                 SET ip = :ip, 
                 `comment` = :comment, 
                 `user_agent` = :user_agent,
@@ -181,7 +181,7 @@ class Blacklist implements BlacklistInterface
                 $date->modify('-' . $lifetime . ' day');
 
                 $this->_db->query(
-                    "DELETE FROM om_nospam_blacklist WHERE `date` <= :date", [
+                    "DELETE FROM om_nospam_log WHERE `date` <= :date", [
                     'date' => $date->format('Y-m-d H:i:s')
                 ]);
 
@@ -225,7 +225,7 @@ class Blacklist implements BlacklistInterface
         $data = array();
         $res = $this->_db->query(
             "SELECT `ip`, `date` 
-            FROM om_nospam_blacklist
+            FROM om_nospam_log
             ORDER BY `ip`, `date` DESC"
         );
 

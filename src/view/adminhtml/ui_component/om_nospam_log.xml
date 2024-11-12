@@ -3,14 +3,14 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <!--
-                prefix must match the xml in view\adminhtml\ui_component\om_nospam_blacklist.xml
+                prefix must match the xml in view\adminhtml\ui_component\om_nospam_log.xml
                 and the definition in view\adminhtml\layout\om_nospam_index_index.xml
             -->
-            <item name="provider" xsi:type="string">om_nospam_blacklist.om_nospam_blacklist_data_source</item>
-            <item name="deps" xsi:type="string">om_nospam_blacklist.om_nospam_blacklist_data_source</item>
+            <item name="provider" xsi:type="string">om_nospam_log.om_nospam_log_data_source</item>
+            <item name="deps" xsi:type="string">om_nospam_log.om_nospam_log_data_source</item>
         </item>
         <!-- spinner name must match the name of the columns section below -->
-        <item name="spinner" xsi:type="string">om_nospam_blacklist_columns</item>
+        <item name="spinner" xsi:type="string">om_nospam_log_columns</item>
         <!--item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
@@ -22,10 +22,10 @@
     </argument>
 
     <!-- DATA SOURCE -->
-    <dataSource name="om_nospam_blacklist_data_source">
+    <dataSource name="om_nospam_log_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">OM\Nospam\Ui\DataProvider\Blacklist\ListingDataProvider</argument>
-            <argument name="name" xsi:type="string">om_nospam_blacklist_data_source</argument>
+            <argument name="class" xsi:type="string">OM\Nospam\Ui\DataProvider\Log\ListingDataProvider</argument>
+            <argument name="name" xsi:type="string">om_nospam_log_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">entity_id</argument>
             <argument name="data" xsi:type="array">
@@ -48,7 +48,7 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="data" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">om_nospam_blacklist_listing.om_nospam_blacklist_listing.om_nospam_blacklist_columns.ids</item>
+                    <item name="selectProvider" xsi:type="string">om_nospam_log_listing.om_nospam_log_listing.om_nospam_log_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
                     <item name="indexField" xsi:type="string">entity_id</item>
@@ -59,7 +59,7 @@
                     <item name="config" xsi:type="array">
                         <item name="type" xsi:type="string">delete</item>
                         <item name="label" xsi:type="string" translate="true">Delete</item>
-                        <item name="url" xsi:type="url" path="om_nospam/blacklist/massDelete" />
+                        <item name="url" xsi:type="url" path="om_nospam/log/massDelete" />
                         <item name="confirm" xsi:type="array">
                             <item name="title" xsi:type="string" translate="true">Delete items</item>
                             <item name="message" xsi:type="string" translate="true">Are you sure you want to delete selected items?</item>
@@ -87,7 +87,7 @@
 
     <!-- COLUMNS -->
     <!-- name needs to match the name of the spinner above -->
-    <columns name="om_nospam_blacklist_columns">
+    <columns name="om_nospam_log_columns">
         <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -131,7 +131,7 @@
             </settings>
         </column>
 
-        <actionsColumn name="actions" class="OM\Nospam\Ui\Component\Blacklist\Listing\Column\Actions" sortOrder="200">
+        <actionsColumn name="actions" class="OM\Nospam\Ui\Component\Log\Listing\Column\Actions" sortOrder="200">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>

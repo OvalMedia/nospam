@@ -5,25 +5,25 @@ namespace OM\Nospam\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DataObject\IdentityInterface;
-use OM\Nospam\Model\ResourceModel\Blacklist as ResourceModelBlacklist;
+use OM\Nospam\Model\ResourceModel\Log as ResourceModelLog;
 
-class Blacklist extends AbstractModel implements IdentityInterface
+class Log extends AbstractModel implements IdentityInterface
 {
     /**
      *
      */
-    const CACHE_TAG = 'om_nospam_blacklist';
+    const CACHE_TAG = 'om_nospam_log';
 
     /**
      * @var string
      */
-    protected $_eventPrefix = 'om_nospam_blacklist';
+    protected $_eventPrefix = 'om_nospam_log';
 
     /**
      *
      */
     protected function _construct() {
-        $this->_init(ResourceModelBlacklist::class);
+        $this->_init(ResourceModelLog::class);
     }
 
     /**

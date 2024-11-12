@@ -3,7 +3,7 @@
     <body>
         <referenceContainer name="content">
             <!--
-                "name" must match the xml in view\adminhtml\ui_component\om_nospam_blacklist.xml
+                "name" must match the xml in view\adminhtml\ui_component\om_nospam_domain.xml
             -->
             <uiComponent name="om_nospam_domain"/>
         </referenceContainer>

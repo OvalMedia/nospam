@@ -11,13 +11,13 @@
             resource="OM_Nospam::main"/>
 
         <add
-            id="OM_Nospam::blacklist"
-            title="Blacklist"
+            id="OM_Nospam::log"
+            title="Log"
             translate="title"
             module="OM_Nospam"
             sortOrder="10"
             parent="OM_Nospam::main"
-            action="nospam/blacklist/index"
+            action="nospam/log/index"
             resource="OM_Nospam::menu"/>
 
         <add

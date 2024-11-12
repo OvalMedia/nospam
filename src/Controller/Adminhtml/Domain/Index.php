@@ -5,6 +5,7 @@ namespace OM\Nospam\Controller\Adminhtml\Domain;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\ResultInterface;
 
@@ -28,9 +29,9 @@ class Index extends Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\View\Result\Page
      */
-    public function execute(): ResultInterface
+    public function execute(): Page
     {
         $resultPage = $this->_resultPageFactory->create();
         $resultPage->setActiveMenu('OM_Nospam::domain');

@@ -1,13 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace OM\Nospam\Controller\Adminhtml\Blacklist;
+namespace OM\Nospam\Controller\Adminhtml\Log;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\ResultInterface;
 
-class Index extends \Magento\Backend\App\Action
+class Index extends Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -32,8 +34,8 @@ class Index extends \Magento\Backend\App\Action
     public function execute(): Page
     {
         $resultPage = $this->_resultPageFactory->create();
-        $resultPage->setActiveMenu('OM_Nospam::blacklist');
-        $resultPage->getConfig()->getTitle()->prepend(__('Blacklist'));
+        $resultPage->setActiveMenu('OM_Nospam::log');
+        $resultPage->getConfig()->getTitle()->prepend(__('Log'));
         return $resultPage;
     }
 
@@ -42,6 +44,6 @@ class Index extends \Magento\Backend\App\Action
      */
     protected function _isAllowed(): bool
     {
-        return $this->_authorization->isAllowed('OM_Nospam::blacklist');
+        return $this->_authorization->isAllowed('OM_Nospam::log');
     }
 }

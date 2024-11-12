@@ -5,7 +5,7 @@ namespace OM\Nospam\Model\ResourceModel\Url;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use OM\Nospam\Model\Url;
-use OM\Nospam\Model\ResourceModel\Blacklist as ResourceModelUrl;
+use OM\Nospam\Model\ResourceModel\Url as ResourceModelUrl;
 
 class Collection extends AbstractCollection
 {

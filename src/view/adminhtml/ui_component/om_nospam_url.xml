@@ -3,7 +3,7 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <!--
-                prefix must match the xml in view\adminhtml\ui_component\om_nospam_domain.xml
+                prefix must match the xml in view\adminhtml\ui_component\om_nospam_url.xml
                 and the definition in view\adminhtml\layout\om_nospam_index_index.xml
             -->
             <item name="provider" xsi:type="string">om_nospam_domain.om_nospam_url_data_source</item>

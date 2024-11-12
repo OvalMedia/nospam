@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace OM\Nospam\Ui\Component\Blacklist\Listing\Column;
+namespace OM\Nospam\Ui\Component\Log\Listing\Column;
 
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;

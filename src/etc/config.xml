@@ -52,7 +52,7 @@
 
             <misc>
                 <remove_from_request>{"_1695129649389_389":{"field":"g-recaptcha-response"},"_1695129658142_142":{"field":"token"},"_1695129658742_742":{"field":"form_key"},"_1695129659302_302":{"field":"password"},"_1695129678029_29":{"field":"password_confirmation"}}</remove_from_request>
-                <max_blacklist_entries>3</max_blacklist_entries>
+                <max_log_entries>3</max_log_entries>
                 <log_lifetime_days>365</log_lifetime_days>
             </misc>
         </om_nospam>

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace OM\Nospam\Ui\DataProvider\Blacklist\Listing;
+namespace OM\Nospam\Ui\DataProvider\Log\Listing;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 

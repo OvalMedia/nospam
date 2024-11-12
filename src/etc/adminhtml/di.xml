@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <!-- Blacklist -->
-    <virtualType name="OM\Nospam\Model\ResourceModel\Blacklist\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <!-- Log -->
+    <virtualType name="OM\Nospam\Model\ResourceModel\Log\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
-            <argument name="mainTable" xsi:type="string">om_nospam_blacklist</argument>
-            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Blacklist</argument>
+            <argument name="mainTable" xsi:type="string">om_nospam_log</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Log</argument>
         </arguments>
     </virtualType>
 
     <!-- benötigt? -->
-    <!--type name="OM\Nospam\Ui\DataProvider\Blacklist\ListingDataProvider">
+    <!--type name="OM\Nospam\Ui\DataProvider\Log\ListingDataProvider">
         <plugin name="dev_grid_attributes" type="OM\Nospam\Plugin\AddAttributesToUiDataProvider" />
     </type-->
 
-    <virtualType name="OMNospamBlacklistCollection" type="OM\Nospam\Ui\DataProvider\Blacklist\Listing\Collection">
+    <virtualType name="OMNospamLogCollection" type="OM\Nospam\Ui\DataProvider\Log\Listing\Collection">
         <arguments>
-            <argument name="mainTable" xsi:type="string">om_nospam_blacklist</argument>
-            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Blacklist</argument>
+            <argument name="mainTable" xsi:type="string">om_nospam_log</argument>
+            <argument name="resourceModel" xsi:type="string">OM\Nospam\Model\ResourceModel\Log</argument>
         </arguments>
     </virtualType>
 

@@ -6,16 +6,17 @@ namespace OM\Nospam\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
-use OM\Nospam\Api\BlacklistInterface;
+use Magento\Quote\Model\Quote;
+use OM\Nospam\Api\LogInterface;
 use OM\Nospam\Api\DomainInterface;
 use OM\Nospam\Model\Config;
 
 class CheckoutSubmitBefore implements ObserverInterface
 {
     /**
-     * @var \OM\Nospam\Api\BlacklistInterface
+     * @var \OM\Nospam\Api\LogInterface
      */
-    protected BlacklistInterface $_blacklist;
+    protected LogInterface $_log;
 
     /**
      * @var \OM\Nospam\Api\DomainInterface
@@ -33,16 +34,16 @@ class CheckoutSubmitBefore implements ObserverInterface
     protected array $_lastError = [];
 
     /**
-     * @param \OM\Nospam\Api\BlacklistInterface $blacklist
+     * @param \OM\Nospam\Api\LogInterface $log
      * @param \OM\Nospam\Api\DomainInterface $domain
      * @param \OM\Nospam\Model\Config $config
      */
     public function __construct(
-        BlacklistInterface $blacklist,
+        LogInterface $log,
         DomainInterface $domain,
         Config $config
     ) {
-        $this->_blacklist = $blacklist;
+        $this->_log = $log;
         $this->_domain = $domain;
         $this->_config = $config;
     }
@@ -60,8 +61,8 @@ class CheckoutSubmitBefore implements ObserverInterface
             return;
         }
 
-        if ($this->_blacklist->isBlacklisted()) {
-            $this->_deny([__(BlacklistInterface::ERROR_MSG_BLACKLISTED)]);
+        if ($this->_log->isBlacklisted()) {
+            $this->_deny([__(LogInterface::ERROR_MSG_BLACKLISTED)]);
             return;
         }
 
@@ -72,7 +73,7 @@ class CheckoutSubmitBefore implements ObserverInterface
 
         if ($this->_domain->isBlacklisted($email)) {
             [,$domain] = explode('@', $email);
-            $this->_blacklist->add('Blacklisted email domain: ' . '@' . $domain);
+            $this->_log->add('Blacklisted email domain: ' . '@' . $domain);
             $this->_deny([DomainInterface::ERROR_MSG_DOMAIN_DENIED, '@' . $domain]);
         }
 
@@ -86,11 +87,10 @@ class CheckoutSubmitBefore implements ObserverInterface
     }
 
     /**
-     * @param $quote
-     *
+     * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      */
-    protected function _checkRegex($quote): bool
+    protected function _checkRegex(Quote $quote): bool
     {
         $result = true;
         $regex = $this->_config->getRegex();
@@ -111,8 +111,8 @@ class CheckoutSubmitBefore implements ObserverInterface
                 foreach ($regex as $name => $expression) {
                     if (@preg_match($expression, $value)) {
                         $result = false;
-                        if (!$this->_blacklist->isBlacklisted()) {
-                            $this->_blacklist->add('Regex: ' . $name . '(' . $expression . ')');
+                        if (!$this->_log->isBlacklisted()) {
+                            $this->_log->add('Regex: ' . $name . '(' . $expression . ')');
                         }
                         $this->_lastError = ["Forbidden characters have been found in '%1'.", $key];
                         break 3;
@@ -125,11 +125,10 @@ class CheckoutSubmitBefore implements ObserverInterface
     }
 
     /**
-     * @param $quote
-     *
+     * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      */
-    protected function _checkAddressFields($quote): bool
+    protected function _checkAddressFields(Quote $quote): bool
     {
         $result = true;
         $addressConfig = $this->_config->getAddressConfig();

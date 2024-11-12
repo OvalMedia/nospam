@@ -52,7 +52,7 @@ class Cache
     {
         try {
             $ips = array();
-            $res = $this->_db->query("SELECT ip FROM om_nospam_blacklist");
+            $res = $this->_db->query("SELECT ip FROM om_nospam_log");
 
             while ($ip = $res->fetchColumn()) {
                 $ips[] = $ip;

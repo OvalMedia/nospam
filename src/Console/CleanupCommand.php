@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use OM\Nospam\Model\Config;
-use OM\Nospam\Api\Blacklist;
+use OM\Nospam\Api\Log;
 
 class CleanupCommand extends Command
 {
@@ -23,34 +23,34 @@ class CleanupCommand extends Command
     protected Config $_config;
 
     /**
-     * @var \OM\Nospam\Api\Blacklist
+     * @var \OM\Nospam\Api\Log
      */
-    protected Blacklist $_blacklist;
+    protected Log $_log;
 
     /**
      * @param \Magento\Framework\App\State $state
      * @param \OM\Nospam\Model\Config $config
-     * @param \OM\Nospam\Api\Blacklist $blacklist
+     * @param \OM\Nospam\Api\Log $log
      */
     public function __construct(
         State $state,
         Config $config,
-        Blacklist $blacklist
+        Log $log
     ) {
         $this->_state = $state;
         $this->_config = $config;
-        $this->_blacklist = $blacklist;
+        $this->_log = $log;
         parent::__construct();
     }
 
     /**
-     *
+     * @return void
      */
     protected function configure()
     {
         $this
             ->setName('om:nospam:cleanup')
-            ->setDescription('Cleanup blacklist')
+            ->setDescription('Cleanup log')
         ;
 
         parent::configure();
@@ -65,7 +65,7 @@ class CleanupCommand extends Command
         $this->_state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
 
         if ($this->_config->isModuleEnabled()) {
-            $this->_blacklist->cleanup();
+            $this->_log->cleanup();
         } else {
             $output->writeln('Module is disabled');
         }

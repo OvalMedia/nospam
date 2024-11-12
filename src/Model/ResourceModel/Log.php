@@ -5,7 +5,7 @@ namespace OM\Nospam\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
-class Blacklist extends AbstractDb
+class Log extends AbstractDb
 {
     /**
      * @var string
@@ -17,6 +17,6 @@ class Blacklist extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('om_nospam_blacklist', 'entity_id');
+        $this->_init('om_nospam_log', 'entity_id');
     }
 }

@@ -484,10 +484,10 @@ class Config
     /**
      * @return int
      */
-    public function getMaxBlacklistEntries(): int
+    public function getMaxLogEntries(): int
     {
         return (int) $this->_scope->getValue(
-            self::CONFIG_PATH . '/misc/max_blacklist_entries',
+            self::CONFIG_PATH . '/misc/max_log_entries',
             ScopeInterface::SCOPE_STORE
         );
     }

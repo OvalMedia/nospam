@@ -9,7 +9,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Message\ManagerInterface;
-use OM\Nospam\Api\BlacklistInterface;
+use OM\Nospam\Api\LogInterface;
 use OM\Nospam\Model\Config;
 
 class Blacklisted implements ObserverInterface
@@ -30,9 +30,9 @@ class Blacklisted implements ObserverInterface
     protected UrlInterface $_url;
 
     /**
-     * @var \OM\Nospam\Api\BlacklistInterface
+     * @var \OM\Nospam\Api\LogInterface
      */
-    protected BlacklistInterface $_blacklist;
+    protected LogInterface $_log;
 
     /**
      * @var \OM\Nospam\Model\Config
@@ -48,7 +48,7 @@ class Blacklisted implements ObserverInterface
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\UrlInterface $url
-     * @param \OM\Nospam\Api\BlacklistInterface $blacklist
+     * @param \OM\Nospam\Api\LogInterface $log
      * @param \OM\Nospam\Model\Config $config
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
@@ -56,14 +56,14 @@ class Blacklisted implements ObserverInterface
         ResponseInterface $response,
         ActionFlag $actionFlag,
         UrlInterface $url,
-        BlacklistInterface $blacklist,
+        LogInterface $log,
         Config $config,
         ManagerInterface $messageManager
     ) {
         $this->_response = $response;
         $this->_actionFlag = $actionFlag;
         $this->_url = $url;
-        $this->_blacklist = $blacklist;
+        $this->_log = $log;
         $this->_config = $config;
         $this->_messageManager = $messageManager;
     }
@@ -78,8 +78,8 @@ class Blacklisted implements ObserverInterface
             return;
         }
 
-        if ($this->_blacklist->isBlacklisted()) {
-            $this->_messageManager->addErrorMessage(__(BlacklistInterface::ERROR_MSG_BLACKLISTED));
+        if ($this->_log->isBlacklisted()) {
+            $this->_messageManager->addErrorMessage(__(LogInterface::ERROR_MSG_BLACKLISTED));
             $url = $this->_config->getNoRouteUrl();
             $redirectUrl = '/';
 

@@ -13,7 +13,7 @@ use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\Action\Action;
-use OM\Nospam\Api\BlacklistInterface;
+use OM\Nospam\Api\LogInterface;
 use OM\Nospam\Api\DomainInterface;
 use OM\Nospam\Api\UrlInterface as NospamUrlInterface;
 use OM\Nospam\Model\Config;
@@ -59,9 +59,9 @@ class ControllerActionPredispatch implements ObserverInterface
     protected ManagerInterface $_messageManager;
 
     /**
-     * @var \OM\Nospam\Api\BlacklistInterface
+     * @var \OM\Nospam\Api\LogInterface
      */
-    protected BlacklistInterface $_blacklist;
+    protected LogInterface $_log;
 
     /**
      * @var \OM\Nospam\Api\UrlInterface
@@ -109,7 +109,7 @@ class ControllerActionPredispatch implements ObserverInterface
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\Controller\Result\RedirectFactory $redirectFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \OM\Nospam\Api\BlacklistInterface $blacklist
+     * @param \OM\Nospam\Api\LogInterface $log
      * @param \OM\Nospam\Api\UrlInterface $suspiciousUrl
      * @param \OM\Nospam\Api\DomainInterface $domain
      * @param \OM\Nospam\Model\Config $config
@@ -123,7 +123,7 @@ class ControllerActionPredispatch implements ObserverInterface
         RedirectInterface $redirect,
         RedirectFactory $redirectFactory,
         ManagerInterface $messageManager,
-        BlacklistInterface $blacklist,
+        LogInterface $log,
         NospamUrlInterface $suspiciousUrl,
         DomainInterface $domain,
         Config $config,
@@ -136,7 +136,7 @@ class ControllerActionPredispatch implements ObserverInterface
         $this->_redirect = $redirect;
         $this->_redirectFactory = $redirectFactory;
         $this->_messageManager = $messageManager;
-        $this->_blacklist = $blacklist;
+        $this->_log = $log;
         $this->_suspiciousUrl = $suspiciousUrl;
         $this->_domain = $domain;
         $this->_config = $config;
@@ -158,7 +158,7 @@ class ControllerActionPredispatch implements ObserverInterface
          * Already blacklisted?
          */
         /*
-        if ($this->_blacklist->isBlacklisted()) {
+        if ($this->_log->isBlacklisted()) {
             $this->_statusCode = 404;
             $this->_redirectUrl = $this->_getDenyUrl();
             $this->_redirect();
@@ -288,7 +288,7 @@ class ControllerActionPredispatch implements ObserverInterface
 
         if ($email && $this->_domain->isBlacklisted($email)) {
             $result = true;
-            $this->_blacklist->add('Blacklisted mail domain: ' . $email);
+            $this->_log->add('Blacklisted mail domain: ' . $email);
         }
 
         return $result;
@@ -313,7 +313,7 @@ class ControllerActionPredispatch implements ObserverInterface
                 $timestamp = $this->_decryptTime->execute($timestamp);
 
                 if (($current - $timestamp) <= $threshold) {
-                    $this->_blacklist->add('Timestamp in ' . $this->_getUri());
+                    $this->_log->add('Timestamp in ' . $this->_getUri());
                     $result = false;
                 }
             }
@@ -339,7 +339,7 @@ class ControllerActionPredispatch implements ObserverInterface
                     $name = str_replace(' ', '-', strtolower($action['name']));
 
                     if (!isset($post[$name]) || !empty($post[$name])) {
-                        $this->_blacklist->add("Honeypot: '$name' in URI: $uri");
+                        $this->_log->add("Honeypot: '$name' in URI: $uri");
                         $result = false;
                         break;
                     }
@@ -352,7 +352,7 @@ class ControllerActionPredispatch implements ObserverInterface
 
     /**
      * Checks all available post fields against all defined regular expressions.
-     * If any expression matches the user ip will be added to the blacklist
+     * If any expression matches the user ip will be added to the log
      * and a redirect URL is set.
      *
      * @return bool
@@ -372,7 +372,7 @@ class ControllerActionPredispatch implements ObserverInterface
 
             foreach ($regex as $name => $expression) {
                 if (preg_match($expression, $field)) {
-                    $this->_blacklist->add('Regex: ' . $name . '(' . $expression . ')');
+                    $this->_log->add('Regex: ' . $name . '(' . $expression . ')');
                     $result = false;
                     break 2;
                 }

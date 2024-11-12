@@ -230,13 +230,13 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     <comment><![CDATA[<p>Requests will be logged in the database. These fields will be removed from requests before storing them in the database.</p>]]></comment>
                 </field>
-                <field id="max_blacklist_entries" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Max blacklist entries</label>
-                    <comment><![CDATA[<p>Maximum blacklist entries of an IP before getting permanently banned.</p>]]></comment>
+                <field id="max_log_entries" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Max log entries</label>
+                    <comment><![CDATA[<p>Maximum log entries of an IP before getting permanently blacklisted.</p>]]></comment>
                 </field>
                 <field id="log_lifetime_days" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Log Lifetime</label>
-                    <comment><![CDATA[<p>Amount of days blacklist entries should be kept. '0' to disable.</p>]]></comment>
+                    <comment><![CDATA[<p>Amount of days log entries should be kept. '0' to disable.</p>]]></comment>
                 </field>
             </group>
         </section>

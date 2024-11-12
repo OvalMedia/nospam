@@ -5,7 +5,7 @@ namespace OM\Nospam\Plugin;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\App\ProductMetadataInterface;
-use OM\Nospam\Ui\DataProvider\Blacklist\ListingDataProvider;
+use OM\Nospam\Ui\DataProvider\Log\ListingDataProvider;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 
 class AddAttributesToUiDataProvider
@@ -33,7 +33,7 @@ class AddAttributesToUiDataProvider
     }
 
     /**
-     * @param \OM\Nospam\Ui\DataProvider\Blacklist\ListingDataProvider $subject
+     * @param \OM\Nospam\Ui\DataProvider\Log\ListingDataProvider $subject
      * @param \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult $result
      * @return \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
      * @throws \Magento\Framework\Exception\NoSuchEntityException
