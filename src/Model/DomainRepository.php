@@ -122,7 +122,7 @@ class DomainRepository implements DomainRepositoryInterface
      * @param \OM\Nospam\Api\Data\DomainInterface $log
      * @return true
      */
-    public function delete(DomainInterface $log): true
+    public function delete(DomainInterface $log)
     {
         try {
             $this->_resource->delete($log);
@@ -136,7 +136,7 @@ class DomainRepository implements DomainRepositoryInterface
      * @param int $id
      * @return true
      */
-    public function deleteById(int $id): true
+    public function deleteById(int $id)
     {
         return $this->delete($this->getById($id));
     }

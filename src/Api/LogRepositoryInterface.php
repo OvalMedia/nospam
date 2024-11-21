@@ -30,11 +30,11 @@ interface LogRepositoryInterface
      * @param \OM\Nospam\Api\Data\LogInterface $log
      * @return mixed
      */
-    public function delete(LogInterface $log): true;
+    public function delete(LogInterface $log);
 
     /**
      * @param int $id
      * @return mixed
      */
-    public function deleteById(int $id): true;
+    public function deleteById(int $id);
 }

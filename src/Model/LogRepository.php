@@ -90,7 +90,7 @@ class LogRepository implements LogRepositoryInterface
      * @param \OM\Nospam\Api\Data\LogInterface $log
      * @return true
      */
-    public function delete(LogInterface $log): true
+    public function delete(LogInterface $log)
     {
         try {
             $this->_logResource->delete($log);
@@ -104,7 +104,7 @@ class LogRepository implements LogRepositoryInterface
      * @param int $id
      * @return true
      */
-    public function deleteById(int $id): true
+    public function deleteById(int $id)
     {
         return $this->delete($this->getById($id));
     }
