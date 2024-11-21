@@ -10,8 +10,6 @@ use OM\Nospam\Api\Data\LogInterface;
 
 class Log extends AbstractModel implements IdentityInterface, LogInterface
 {
-    const CACHE_TAG = 'om_nospam_log';
-
     /**
      * @var string
      */
