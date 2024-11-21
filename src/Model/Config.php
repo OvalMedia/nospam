@@ -294,7 +294,7 @@ class Config
         $result = [];
 
         $fields = $this->_scope->getValue(
-            self::CONFIG_PATH . '/regex/expressions',
+            self::CONFIG_PATH . '/forms/regex/expressions',
             ScopeInterface::SCOPE_STORE
         );
 
@@ -319,7 +319,7 @@ class Config
         $result = [];
 
         $fields = $this->_scope->getValue(
-            self::CONFIG_PATH . '/regex/exclude',
+            self::CONFIG_PATH . '/forms/regex/exclude',
             ScopeInterface::SCOPE_STORE
         );
 
@@ -488,6 +488,17 @@ class Config
     {
         return (int) $this->_scope->getValue(
             self::CONFIG_PATH . '/misc/max_log_entries',
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxLogTimePeriod(): int
+    {
+        return (int) $this->_scope->getValue(
+            self::CONFIG_PATH . '/misc/log_time_period',
             ScopeInterface::SCOPE_STORE
         );
     }

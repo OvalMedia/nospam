@@ -5,7 +5,7 @@ namespace OM\Nospam\Model\ResourceModel\Log;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use OM\Nospam\Model\Log;
-use OM\Nospam\Model\ResourceModel\Log as ResourceModelLog;
+use OM\Nospam\Model\ResourceModel\Log as ResourceModel;
 
 class Collection extends AbstractCollection
 {
@@ -31,7 +31,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             Log::class,
-            ResourceModelLog::class
+            ResourceModel::class
         );
     }
 }

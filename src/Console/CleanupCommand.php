@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace OM\Nospam\Console;
 
 use Magento\Framework\App\State;
+use Magento\Framework\App\Area;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use OM\Nospam\Model\Config;
-use OM\Nospam\Api\Log;
+use OM\Nospam\Service\LogService;
 
 class CleanupCommand extends Command
 {
@@ -23,23 +24,23 @@ class CleanupCommand extends Command
     protected Config $_config;
 
     /**
-     * @var \OM\Nospam\Api\Log
+     * @var \OM\Nospam\Service\LogService
      */
-    protected Log $_log;
+    protected LogService $_logService;
 
     /**
      * @param \Magento\Framework\App\State $state
      * @param \OM\Nospam\Model\Config $config
-     * @param \OM\Nospam\Api\Log $log
+     * @param \OM\Nospam\Service\LogService $logService
      */
     public function __construct(
         State $state,
         Config $config,
-        Log $log
+        LogService $logService
     ) {
         $this->_state = $state;
         $this->_config = $config;
-        $this->_log = $log;
+        $this->_logService = $logService;
         parent::__construct();
     }
 
@@ -57,17 +58,24 @@ class CleanupCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->_state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        try {
+            $this->_state->setAreaCode(Area::AREA_ADMINHTML);
 
-        if ($this->_config->isModuleEnabled()) {
-            $this->_log->cleanup();
-        } else {
-            $output->writeln('Module is disabled');
+            if ($this->_config->isModuleEnabled()) {
+                $this->_logService->cleanup();
+            } else {
+                $output->writeln('Module is disabled');
+            }
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
         }
+
+        return 1;
     }
 }

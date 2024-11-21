@@ -83,6 +83,7 @@
                                 <li>account creation</li>
                                 <li>newsletter signup</li>
                                 <li>customer account login</li>
+                                <li>password forgotten</li>
                                 <li>search</li>
                                 <li>contact form</li>
                             </ul>
@@ -204,24 +205,6 @@
                 </field>
             </group>
 
-            <group id="suspicious" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Suspicious URLs</label>
-                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[<p>Check for suspicious url parts.</p>]]></comment>
-                </field>
-                <field id="urls" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>List of url parts</label>
-                    <frontend_model>OM\Nospam\Block\Adminhtml\InputField</frontend_model>
-                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-                    <comment><![CDATA[<p>List of URL parts that are deemed to be suspicious.</p>]]></comment>
-                    <depends>
-                        <field id="*/*/*/enabled">1</field>
-                    </depends>
-                </field>
-            </group>
-
             <group id="misc" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Miscellaneous</label>
                 <field id="remove_from_request" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -234,7 +217,11 @@
                     <label>Max log entries</label>
                     <comment><![CDATA[<p>Maximum log entries of an IP before getting permanently blacklisted.</p>]]></comment>
                 </field>
-                <field id="log_lifetime_days" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="log_time_period" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Max log time</label>
+                    <comment><![CDATA[<p>Max log entries within this period of time in hours.</p>]]></comment>
+                </field>
+                <field id="log_lifetime_days" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Log Lifetime</label>
                     <comment><![CDATA[<p>Amount of days log entries should be kept. '0' to disable.</p>]]></comment>
                 </field>

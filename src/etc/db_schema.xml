@@ -15,25 +15,20 @@
 
     <table name="om_nospam_domains" resource="default" engine="innodb">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
-        <column xsi:type="varchar" name="domain" length="255" nullable="false" />
+        <column xsi:type="varchar" name="name" onCreate="migrateDataFrom(domain)" length="255" nullable="false" />
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
 
-        <constraint xsi:type="unique" referenceId="OM_NOSPAM_DOMAINS_UNIQUE">
-            <column name="domain"/>
+        <constraint xsi:type="unique" referenceId="OM_NOSPAM_DOMAIN_NAME_UNIQUE">
+            <column name="name"/>
         </constraint>
+
+        <column name="domain" disabled="true" />
+        <constraint referenceId="OM_NOSPAM_DOMAINS_DOMAIN" disabled="true" />
     </table>
 
-    <table name="om_nospam_urls" resource="default" engine="innodb">
-        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
-        <column xsi:type="char" name="ip" length="15" nullable="false" />
-        <column xsi:type="datetime" name="date" default="CURRENT_TIMESTAMP" on_update="false" />
-        <column xsi:type="text" name="url" nullable="false" />
-
-        <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="entity_id"/>
-        </constraint>
-    </table>
+    <table name="om_nospam_blacklist" resource="default" engine="innodb" disabled="true" />
+    <table name="om_nospam_urls" resource="default" engine="innodb" disabled="true" />
 </schema>

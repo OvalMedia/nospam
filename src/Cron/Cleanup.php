@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace OM\Nospam\Cron;
 
 use OM\Nospam\Model\Config;
-use OM\Nospam\Api\Log;
+use OM\Nospam\Service\LogService;
 
 class Cleanup
 {
@@ -14,20 +14,20 @@ class Cleanup
     protected Config $_config;
 
     /**
-     * @var \OM\Nospam\Api\Log
+     * @var \OM\Nospam\Service\LogService
      */
-    protected Log $_log;
+    protected LogService $_logService;
 
     /**
      * @param \OM\Nospam\Model\Config $config
-     * @param \OM\Nospam\Api\Log $log
+     * @param \OM\Nospam\Service\LogService $logService
      */
     public function __construct(
         Config  $config,
-        Log $log
+        LogService $logService
     ) {
         $this->_config = $config;
-        $this->_log = $log;
+        $this->_logService = $logService;
     }
 
     /**
@@ -36,7 +36,7 @@ class Cleanup
     public function execute(): void
     {
         if ($this->_config->isModuleEnabled()) {
-            $this->_log->cleanup();
+            $this->_logService->cleanup();
         }
     }
 }

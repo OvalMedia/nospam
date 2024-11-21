@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace OM\Nospam\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\RequestInterface;
@@ -13,16 +14,14 @@ use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\Action\Action;
-use OM\Nospam\Api\LogInterface;
-use OM\Nospam\Api\DomainInterface;
-use OM\Nospam\Api\UrlInterface as NospamUrlInterface;
+use Psr\Log\LoggerInterface;
+use OM\Nospam\Service\LogService;
+use OM\Nospam\Service\DomainService;
 use OM\Nospam\Model\Config;
 use OM\Nospam\Actions\DecryptTime;
 
 class ControllerActionPredispatch implements ObserverInterface
 {
-    const FLAG_SUSPICIOUS_URL = 'flag_suspicious_url_checked';
-
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
@@ -34,14 +33,14 @@ class ControllerActionPredispatch implements ObserverInterface
     protected ResponseInterface $_response;
 
     /**
+     * @var \Magento\Framework\UrlInterface 
+     */
+    protected UrlInterface $_url;
+
+    /**
      * @var \Magento\Framework\App\ActionFlag
      */
     protected ActionFlag $_actionFlag;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected UrlInterface $_url;
 
     /**
      * @var \Magento\Framework\App\Response\RedirectInterface
@@ -59,19 +58,19 @@ class ControllerActionPredispatch implements ObserverInterface
     protected ManagerInterface $_messageManager;
 
     /**
-     * @var \OM\Nospam\Api\LogInterface
+     * @var \Psr\Log\LoggerInterface
      */
-    protected LogInterface $_log;
+    protected LoggerInterface $_logger;
 
     /**
-     * @var \OM\Nospam\Api\UrlInterface
+     * @var \OM\Nospam\Service\LogService
      */
-    protected NospamUrlInterface $_suspiciousUrl;
+    protected LogService $_logService;
 
     /**
-     * @var \OM\Nospam\Api\DomainInterface
+     * @var \OM\Nospam\Service\DomainService
      */
-    protected DomainInterface $_domain;
+    protected DomainService $_domainService;
 
     /**
      * @var \OM\Nospam\Model\Config
@@ -82,19 +81,6 @@ class ControllerActionPredispatch implements ObserverInterface
      * @var \OM\Nospam\Actions\DecryptTime
      */
     protected DecryptTime $_decryptTime;
-
-    /**
-     * @var bool
-     */
-    protected bool $_suspiciousUrlChecked = false;
-
-    protected $_status;
-
-    protected $_statusCode;
-
-    protected $_redirectUrl;
-
-    protected $_message;
 
     /**
      * @var array
@@ -109,9 +95,9 @@ class ControllerActionPredispatch implements ObserverInterface
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param \Magento\Framework\Controller\Result\RedirectFactory $redirectFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \OM\Nospam\Api\LogInterface $log
-     * @param \OM\Nospam\Api\UrlInterface $suspiciousUrl
-     * @param \OM\Nospam\Api\DomainInterface $domain
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \OM\Nospam\Service\LogService $logService
+     * @param \OM\Nospam\Service\DomainService $domainService
      * @param \OM\Nospam\Model\Config $config
      * @param \OM\Nospam\Actions\DecryptTime $decryptTime
      */
@@ -123,9 +109,9 @@ class ControllerActionPredispatch implements ObserverInterface
         RedirectInterface $redirect,
         RedirectFactory $redirectFactory,
         ManagerInterface $messageManager,
-        LogInterface $log,
-        NospamUrlInterface $suspiciousUrl,
-        DomainInterface $domain,
+        LoggerInterface $logger,
+        LogService $logService,
+        DomainService $domainService,
         Config $config,
         DecryptTime $decryptTime
     ) {
@@ -136,9 +122,9 @@ class ControllerActionPredispatch implements ObserverInterface
         $this->_redirect = $redirect;
         $this->_redirectFactory = $redirectFactory;
         $this->_messageManager = $messageManager;
-        $this->_log = $log;
-        $this->_suspiciousUrl = $suspiciousUrl;
-        $this->_domain = $domain;
+        $this->_logger = $logger;
+        $this->_logService = $logService;
+        $this->_domainService = $domainService;
         $this->_config = $config;
         $this->_decryptTime = $decryptTime;
     }
@@ -148,23 +134,11 @@ class ControllerActionPredispatch implements ObserverInterface
      *
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if (!$this->_config->isModuleEnabled()) {
             return;
         }
-
-        /**
-         * Already blacklisted?
-         */
-        /*
-        if ($this->_log->isBlacklisted()) {
-            $this->_statusCode = 404;
-            $this->_redirectUrl = $this->_getDenyUrl();
-            $this->_redirect();
-            return;
-        }*/
-
 
         /**
          * Timestamps
@@ -201,48 +175,11 @@ class ControllerActionPredispatch implements ObserverInterface
          */
         if ($this->_config->checkBlacklistedMailDomains()) {
             if ($this->_isEmailDomainBlacklisted()) {
-                $this->_messageManager->addErrorMessage(__('This email domain is not allowed.'));
+                $this->_messageManager->addErrorMessage(__('This email domain is not allowed. Please pick another email address.'));
                 $this->_redirect($this->_redirect->getRefererUrl(), 400);
                 return;
             }
         }
-
-        /**
-         * Check for suspicious url.
-         */
-        if ($this->_config->checkSuspiciousUrlParts() && !$this->_suspiciousUrlChecked) {
-            if ($this->_isSuspicious()) {
-                $this->_suspiciousUrl->add($this->_url->getCurrentUrl());
-            }
-
-            /**
-             * Prevent multiple executions in one dispatch cycle
-             */
-            $this->_suspiciousUrlChecked = true;
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isSuspicious(): bool
-    {
-        $result = false;
-        $parts = $this->_config->getSuspiciousUrlParts();
-
-        if (!empty($parts)) {
-            $url = strtolower($this->_url->getCurrentUrl());
-
-            foreach ($parts as $part) {
-                $part = strtolower($part);
-
-                if (strpos($url, $part) !== false) {
-                    $result = true;
-                }
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -286,9 +223,9 @@ class ControllerActionPredispatch implements ObserverInterface
         $post = $this->_getFlatPostData();
         $email = $post['email'] ?? false;
 
-        if ($email && $this->_domain->isBlacklisted($email)) {
+        if ($email && $this->_domainService->isBlacklisted($email)) {
             $result = true;
-            $this->_log->add('Blacklisted mail domain: ' . $email);
+            $this->_logService->add('Blacklisted mail domain: ' . $email);
         }
 
         return $result;
@@ -313,7 +250,7 @@ class ControllerActionPredispatch implements ObserverInterface
                 $timestamp = $this->_decryptTime->execute($timestamp);
 
                 if (($current - $timestamp) <= $threshold) {
-                    $this->_log->add('Timestamp in ' . $this->_getUri());
+                    $this->_logService->add('Timestamp in ' . $this->_getUri());
                     $result = false;
                 }
             }
@@ -339,7 +276,7 @@ class ControllerActionPredispatch implements ObserverInterface
                     $name = str_replace(' ', '-', strtolower($action['name']));
 
                     if (!isset($post[$name]) || !empty($post[$name])) {
-                        $this->_log->add("Honeypot: '$name' in URI: $uri");
+                        $this->_logService->add("Honeypot: '$name' in URI: $uri");
                         $result = false;
                         break;
                     }
@@ -371,10 +308,14 @@ class ControllerActionPredispatch implements ObserverInterface
             }
 
             foreach ($regex as $name => $expression) {
-                if (preg_match($expression, $field)) {
-                    $this->_log->add('Regex: ' . $name . '(' . $expression . ')');
-                    $result = false;
-                    break 2;
+                try {
+                    if (preg_match($expression, $field)) {
+                        $this->_logService->add('Regex: ' . $name . ' (' . $expression . ') in "' . $key . '": "' . $field . '"');
+                        $result = false;
+                        break 2;
+                    }
+                } catch (\Exception $e) {
+                    $this->_logger->critical($e->getMessage());
                 }
             }
         }

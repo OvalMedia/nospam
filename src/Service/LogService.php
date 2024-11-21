@@ -1,32 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace OM\Nospam\Api;
+namespace OM\Nospam\Service;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Psr\Log\LoggerInterface;
 
-use OM\Nospam\Model\Cache\Type\Log as CacheType;
-use OM\Nospam\Api\LogInterface;
+use OM\Nospam\Model\LogFactory;
+use OM\Nospam\Model\LogRepository;
+use OM\Nospam\Model\ResourceModel\Log\CollectionFactory;
 use OM\Nospam\Model\Config;
 
-class Log implements LogInterface
+class LogService
 {
-    /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected AdapterInterface $_db;
-
-    /**
-     * @var \Magento\Framework\App\CacheInterface
-     */
-    protected CacheInterface $_cache;
-
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
@@ -53,30 +43,56 @@ class Log implements LogInterface
     protected Config $_config;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $connection
-     * @param \Magento\Framework\App\CacheInterface $cache
+     * @var \OM\Nospam\Model\ResourceModel\Log\CollectionFactory
+     */
+    protected CollectionFactory $_collectionFactory;
+
+    /**
+     * @var \OM\Nospam\Model\LogRepository
+     */
+    protected LogRepository $_logRepository;
+
+    /**
+     * @var \OM\Nospam\Model\LogFactory
+     */
+    protected LogFactory $_logFactory;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected LoggerInterface $_logger;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\HTTP\Header $header
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \OM\Nospam\Model\Config $config
+     * @param \OM\Nospam\Model\LogRepository $logRepository
+     * @param \OM\Nospam\Model\LogFactory $logFactory
+     * @param \OM\Nospam\Model\ResourceModel\Log\CollectionFactory $collectionFactory
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        ResourceConnection $connection,
-        CacheInterface $cache,
         RequestInterface $request,
         Header $header,
         RemoteAddress $remoteAddress,
         SerializerInterface $serializer,
-        Config $config
+        Config $config,
+        LogRepository $logRepository,
+        LogFactory $logFactory,
+        CollectionFactory $collectionFactory,
+        LoggerInterface $logger
     ){
-        $this->_db = $connection->getConnection('default');
-        $this->_cache = $cache;
         $this->_request = $request;
         $this->_header = $header;
         $this->_remoteAddress = $remoteAddress;
         $this->_serializer = $serializer;
         $this->_config = $config;
+        $this->_logRepository = $logRepository;
+        $this->_logFactory = $logFactory;
+        $this->_collectionFactory = $collectionFactory;
+        $this->_logger = $logger;
     }
 
     /**
@@ -88,14 +104,26 @@ class Log implements LogInterface
 
         try {
             if ($ip = $this->_getCurrentIp()) {
-                $data = $this->_getData();
                 $max = $this->_config->getMaxLogEntries();
+                $hours = $this->_config->getMaxLogTimePeriod();
+                $now = new \DateTime();
 
-                if (isset($data[$ip]) && count($data[$ip]) >= $max) {
+                $interval = new \DateInterval('PT' . $hours . 'H');
+                $now->sub($interval);
+
+                $collection = $this->_collectionFactory->create();
+                $collection
+                    ->addFieldToFilter('ip', $ip)
+                    ->addFieldToFilter('date', ['gteq' => $now->format('Y-m-d H:i:s')])
+                ;
+
+                if ($collection->count() >= $max) {
                     $result = true;
                 }
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+            $this->_logger->critical($e->getMessage());
+        }
 
         return $result;
     }
@@ -105,26 +133,19 @@ class Log implements LogInterface
      *
      * @return void
      */
-    public function add(?string $comment = null)
+    public function add(?string $comment = null): void
     {
         try {
-            $this->_db->query(
-                "INSERT INTO om_nospam_log
-                SET ip = :ip, 
-                `comment` = :comment, 
-                `user_agent` = :user_agent,
-                `request` = :request",
-                array(
-                    'ip' => $this->_getCurrentIp(),
-                    'comment' => $comment,
-                    'user_agent' => $this->_header->getHttpUserAgent(),
-                    'request' => json_encode($this->_getParams())
-                )
-            );
-
-            $this->_loadFromDb();
-        } catch (\Zend_Db_Statement_Exception $e) {
-            die($e->getMessage());
+            $log = $this->_logFactory->create();
+            $log
+                ->setIp($this->_getCurrentIp())
+                ->setComment($comment)
+                ->setUserAgent($this->_header->getHttpUserAgent())
+                ->setRequest(json_encode($this->_getParams()))
+            ;
+            $this->_logRepository->save($log);
+        } catch (\Exception $e) {
+            $this->_logger->critical($e->getMessage());
         }
     }
 
@@ -171,22 +192,20 @@ class Log implements LogInterface
     /**
      * @todo Handle Exception
      */
-    public function cleanup()
+    public function cleanup(): void
     {
-        $lifetime = $this->_config->getLogLifetime();
+        $days = $this->_config->getLogLifetime();
 
-        if ($lifetime > 0) {
+        if ($days > 0) {
             try {
                 $date = new \DateTime();
-                $date->modify('-' . $lifetime . ' day');
-
-                $this->_db->query(
-                    "DELETE FROM om_nospam_log WHERE `date` <= :date", [
-                    'date' => $date->format('Y-m-d H:i:s')
-                ]);
-
-                $this->_loadFromDb();
-            } catch (\Zend_Db_Statement_Exception $e) {
+                $interval = new \DateInterval('P' . $days . 'D');
+                $date->sub($interval);
+                $collection = $this->_collectionFactory->create();
+                $collection->addFieldToFilter('date', ['lteq' => $date]);
+                $collection->walk('delete');
+            } catch (\Exception $e) {
+                $this->_logger->critical($e->getMessage());
             }
         }
     }
@@ -197,51 +216,5 @@ class Log implements LogInterface
     protected function _getCurrentIp(): ?string
     {
         return $this->_remoteAddress->getRemoteAddress();
-    }
-
-    /**
-     * @return array|bool|float|int|string|null
-     * @throws \Zend_Db_Statement_Exception
-     */
-    protected function _getData()
-    {
-        $data = $this->_cache->load(CacheType::CACHE_KEY);
-
-        if ($data) {
-            $data = $this->_serializer->unserialize($data);
-        } else {
-            $data = $this->_loadFromDb();
-        }
-
-        return $data;
-    }
-
-    /**
-     * @return array
-     * @throws \Zend_Db_Statement_Exception
-     */
-    protected function _loadFromDb(): array
-    {
-        $data = array();
-        $res = $this->_db->query(
-            "SELECT `ip`, `date` 
-            FROM om_nospam_log
-            ORDER BY `ip`, `date` DESC"
-        );
-
-        while ($row = $res->fetchObject()) {
-            $data[$row->ip][] = $row->date;
-        }
-
-        if (!empty($data)) {
-            $this->_cache->save(
-                $this->_serializer->serialize($data),
-                CacheType::CACHE_KEY,
-                [CacheType::CACHE_TAG],
-                CacheType::CACHE_LIFETIME
-            );
-        }
-
-        return $data;
     }
 }

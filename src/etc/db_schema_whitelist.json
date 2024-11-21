@@ -1,0 +1,29 @@
+{
+    "om_nospam_log": {
+        "column": {
+            "entity_id": true,
+            "ip": true,
+            "date": true,
+            "comment": true,
+            "user_agent": true,
+            "request": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "om_nospam_domains": {
+        "column": {
+            "entity_id": true,
+            "domain": true,
+            "name": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "OM_NOSPAM_DOMAINS_NAME": true,
+            "OM_NOSPAM_DOMAINS_DOMAIN": true
+        }
+    },
+    "om_nospam_blacklist": [],
+    "om_nospam_urls": []
+}

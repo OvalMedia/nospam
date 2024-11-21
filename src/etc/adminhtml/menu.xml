@@ -29,15 +29,5 @@
             parent="OM_Nospam::main"
             action="nospam/domain/index"
             resource="OM_Nospam::menu"/>
-
-        <add
-                id="OM_Nospam::url"
-                title="Suspicious URLs"
-                translate="title"
-                module="OM_Nospam"
-                sortOrder="30"
-                parent="OM_Nospam::main"
-                action="nospam/url/index"
-                resource="OM_Nospam::url"/>
     </menu>
 </config>

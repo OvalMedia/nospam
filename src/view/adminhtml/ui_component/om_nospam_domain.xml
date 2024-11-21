@@ -107,7 +107,7 @@
             </settings>
         </column>
 
-        <column name="domain" sortOrder="20">
+        <column name="name" sortOrder="20">
             <settings>
                 <filter>text</filter>
                 <bodyTmpl>ui/grid/cells/text</bodyTmpl>

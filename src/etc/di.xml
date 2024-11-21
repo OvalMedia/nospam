@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="OM\Nospam\Api\LogInterface" type="OM\Nospam\Api\Log"/>
-    <preference for="OM\Nospam\Api\DomainInterface" type="OM\Nospam\Api\Domain"/>
-    <preference for="OM\Nospam\Api\SuspiciousUrlInterface" type="OM\Nospam\Api\SuspiciousUrl"/>
-    <preference for="OM\Nospam\Api\UrlInterface" type="OM\Nospam\Api\Url"/>
+    <preference for="OM\Nospam\Api\Data\LogInterface" type="OM\Nospam\Model\Log"/>
+    <preference for="OM\Nospam\Api\Data\DomainInterface" type="OM\Nospam\Model\Domain"/>
+    <preference for="OM\Nospam\Api\LogRepositoryInterface" type="OM\Nospam\Model\LogRepository"/>
+    <preference for="OM\Nospam\Api\DomainRepositoryInterface" type="OM\Nospam\Model\DomainRepository"/>
 
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
@@ -27,15 +27,6 @@
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="om_nospam_domain_data_source" xsi:type="string">OMNospamDomainCollection</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <!-- Suspicious URLs -->
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="om_nospam_url_data_source" xsi:type="string">OMNospamUrlCollection</item>
             </argument>
         </arguments>
     </type>

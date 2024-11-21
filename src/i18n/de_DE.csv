@@ -3,6 +3,16 @@
 
 "Your email domain '%1' is not allowed. Please pick another email address.","Ihre E-Mail-Domain '%1' ist nicht zulässig. Bitte wählen Sie eine andere E-Mail-Adresse."
 "Forbidden characters have been found in '%1'.","Im Feld '%1' wurden unerlaubte Zeichen entdeckt."
-"The length of the address field '%1' exceeds the given limit (%2).","Die Länge des Adressfelds '%1' übersteigt die erlaubte Maximallänge (%2)."
+"The length of the field '%1' exceeds the given limit (%2).","Die Länge des Feldes '%1' übersteigt die erlaubte Maximallänge (%2)."
 
 "Add new Domain","Neue Domain hinzufügen"
+"You have been blacklisted due to multiple violations of our service. This ban will be lifted automatically after %1 hours. Please contact us if you have any questions.","Sie wurden aufgrund mehrfacher Verstöße gegen unseren Dienst auf die schwarze Liste gesetzt. Dieses Verbot wird automatisch nach %1 Stunden aufgehoben. Bitte kontaktieren Sie uns, wenn Sie Fragen haben."
+"This email domain is not allowed. Please pick another email address.","Diese E-Mail-Domain ist nicht zugelassen. Bitte wählen Sie eine andere E-Mail-Adresse."
+"firstname","Vorname"
+"lastname","Nachname"
+"middlename","Zweiter Vorname"
+"company","Firma"
+"street","Straße"
+"city","Stadt"
+"postcode","Postleitzahl"
+"telephone","Telefon"

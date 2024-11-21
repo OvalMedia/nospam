@@ -9,7 +9,7 @@
             <forms>
                 <honeypots>
                     <enabled>1</enabled>
-                    <forms>{"_1699266672523_523":{"name":"Customer Website","action":"\/customer\/account\/createpost\/"},"_1699266957131_131":{"name":"Customer No","action":"\/customer\/account\/loginPost\/"},"_1699266972067_67":{"name":"Subject","action":"\/contact\/index\/post\/"},"_1699266982955_955":{"name":"Name","action":"\/newsletter\/subscriber\/new\/"},"_1699267005538_538":{"name":"Review","action":"\/review\/product\/post\/"},"_1699954839671_671":{"name":"Sale","action":"\/catalogsearch\/result\/"}}</forms>
+                    <forms>{"_1699266672523_523":{"name":"Customer Website","action":"\/customer\/account\/createpost\/"},"_1699266957131_131":{"name":"Customer No","action":"\/customer\/account\/loginPost\/"},"_1699266972067_67":{"name":"Subject","action":"\/contact\/index\/post\/"},"_1699266982955_955":{"name":"Name","action":"\/newsletter\/subscriber\/new\/"},"_1699267005538_538":{"name":"Review","action":"\/review\/product\/post\/"},"_1699954839671_671":{"name":"Sale","action":"\/catalogsearch\/result\/"},"_1731574273616_616":{"name":"Name","action":"\/customer\/account\/forgotpasswordpost\/"}}</forms>
                 </honeypots>
 
                 <timestamps>
@@ -53,7 +53,8 @@
             <misc>
                 <remove_from_request>{"_1695129649389_389":{"field":"g-recaptcha-response"},"_1695129658142_142":{"field":"token"},"_1695129658742_742":{"field":"form_key"},"_1695129659302_302":{"field":"password"},"_1695129678029_29":{"field":"password_confirmation"}}</remove_from_request>
                 <max_log_entries>3</max_log_entries>
-                <log_lifetime_days>365</log_lifetime_days>
+                <log_time_period>24</log_time_period>
+                <log_lifetime_days>30</log_lifetime_days>
             </misc>
         </om_nospam>
     </default>

@@ -50,6 +50,15 @@ class Actions extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
+                $item[$this->getData('name')]['delete'] = [
+                    'href' => $this->_urlBuilder->getUrl(
+                        'nospam/log/delete',
+                        ['id' => $item['entity_id']]
+                    ),
+                    'label' => __('Delete'),
+                    'hidden' => false,
+                ];
+                /*
                 $name = $this->getData('name');
                 if (isset($item['entity_id'])) {
                     $item[$name]['view'] = [
@@ -57,7 +66,7 @@ class Actions extends Column
                         'target' => '_self',
                         'label' => __('Delete')
                     ];
-                }
+                }*/
             }
         }
         return $dataSource;

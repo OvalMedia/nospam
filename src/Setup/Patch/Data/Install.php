@@ -70,6 +70,10 @@ class Install implements DataPatchInterface
         $this->_setupConfigData();
     }
 
+    /**
+     * @return void
+     * @throws \Random\RandomException
+     */
     protected function _setupConfigData()
     {
         $path = Config::CONFIG_PATH . '/forms/timestamps/';

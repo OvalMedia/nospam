@@ -5,7 +5,7 @@ namespace OM\Nospam\Model\ResourceModel\Domain;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use OM\Nospam\Model\Domain;
-use OM\Nospam\Model\ResourceModel\Domain as ResourceModelDomain;
+use OM\Nospam\Model\ResourceModel\Domain as ResourceModel;
 
 class Collection extends AbstractCollection
 {
@@ -31,7 +31,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             Domain::class,
-            ResourceModelDomain::class
+            ResourceModel::class
         );
     }
 }
