@@ -53,8 +53,20 @@ class Robots
                     $result .= "\n";
                 }
 
-                $result .= "User-agent: * \n";
-                $result .= "Disallow: /" . $url . "\n";
+                $robots = explode("\n", str_replace("\r", '', $result));
+
+                $additions = [
+                    'User-agent: *',
+                    'Disallow: /' . $url,
+                ];
+
+                foreach ($additions as $addition) {
+                    if (!in_array($addition, $robots)) {
+                        $robots[] = $addition;
+                    }
+                }
+
+                $result = implode("\r\n", $robots);
             }
         }
 
