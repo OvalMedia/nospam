@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
+ <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="om_nospam_log" onCreate="migrateDataFromAnotherTable(om_nospam_blacklist)" resource="default" engine="innodb">
+    <table name="om_nospam_log" resource="default" engine="innodb">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
         <column xsi:type="char" name="ip" length="15" nullable="false" />
         <column xsi:type="datetime" name="date" default="CURRENT_TIMESTAMP" on_update="false" />
@@ -15,7 +15,7 @@
 
     <table name="om_nospam_domains" resource="default" engine="innodb">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" />
-        <column xsi:type="varchar" name="name" onCreate="migrateDataFrom(domain)" length="255" nullable="false" />
+        <column xsi:type="varchar" name="name" length="255" nullable="false" />
 
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -24,11 +24,5 @@
         <constraint xsi:type="unique" referenceId="OM_NOSPAM_DOMAIN_NAME_UNIQUE">
             <column name="name"/>
         </constraint>
-
-        <column name="domain" disabled="true" />
-        <constraint referenceId="OM_NOSPAM_DOMAINS_DOMAIN" disabled="true" />
     </table>
-
-    <table name="om_nospam_blacklist" resource="default" engine="innodb" disabled="true" />
-    <table name="om_nospam_urls" resource="default" engine="innodb" disabled="true" />
 </schema>
