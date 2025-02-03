@@ -104,8 +104,8 @@ class Install implements DataPatchInterface
                     if (!empty($domain)) {
                         $this->_db->query(
                             "INSERT IGNORE om_nospam_domains
-                            SET `domain` = :domain", [
-                                'domain' => $domain
+                            SET `name` = :name", [
+                                'name' => $domain
                             ]
                         );
                     }
